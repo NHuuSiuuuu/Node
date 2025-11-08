@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Schema: Định nghĩa cấi trúc dữ liệu sản phẩm
+// Schema: Định nghĩa cấi trúc dữ liệu sản phẩm, định nghĩa sản phẩm có trường gì
 // Schema giúp Mongoose kiểm soát dữ liệu trước khi lưu vào database
 const productSchema = new mongoose.Schema({
   title: String,

@@ -1,5 +1,7 @@
-const productRoutes = require("./product.route")
+// Định nghĩa đường dẫn gọi controller nào
+
 const homeRoutes = require("./home.route")
+const productRoutes = require("./product.route")
 
 module.exports = (app) => {
   app.get("/", homeRoutes);

@@ -7,7 +7,12 @@ require('dotenv').config()
 const database = require("./config/database")
 database.connect();
 
+// import routes client
 const route = require("./routes/client/index.route")
+
+// import routes admin
+const routeAdmin = require("./routes/admin/index.route")
+
 
 const app = express(); // toàn bộ chương trình
 
@@ -18,6 +23,7 @@ app.set("view engine", "pug");
 
 // Routes
 route(app)
+routeAdmin(app)
 
 // Nhúng file tĩnh: các file có thể xem được ở bên ngoài
 app.use(express.static('public'))

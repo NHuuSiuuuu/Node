@@ -1,3 +1,5 @@
+// Nhận request từ người dùng, xử lý logic, rồi quyết định render ra trang nào / trả dữ liệu nào.
+
 const Product = require("../../models/product.model");
 
 module.exports.product = async (req, res) => {

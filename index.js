@@ -3,6 +3,10 @@ const express = require("express"); // import
 require('dotenv').config()
 // console.log(process.env.PORT)
 
+// import mongoose
+const database = require("./config/database")
+database.connect();
+
 const route = require("./routes/client/index.route")
 
 const app = express(); // toàn bộ chương trình

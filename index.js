@@ -15,6 +15,8 @@ app.set("view engine", "pug");
 // Routes
 route(app)
 
+// Nhúng file tĩnh: các file có thể xem được ở bên ngoài
+app.use(express.static('public'))
 
 
 app.listen(port, () => {

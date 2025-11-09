@@ -21,6 +21,11 @@ const port = process.env.PORT; // port = 3000
 app.set("views", "./views");
 app.set("view engine", "pug");
 
+// Biến toàn cục
+const systemConfig = require("./config/system")
+// Đặt tên biến là prefixAdmin
+app.locals.prefixAdmin = systemConfig.prefixAdmin // /ADMIN
+
 // Routes
 route(app)
 routeAdmin(app)

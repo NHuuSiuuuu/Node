@@ -1,4 +1,7 @@
 extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search-status.pug
+
 
 block main
     h1 ADMIN Danh sách sản phẩm
@@ -8,55 +11,95 @@ block main
         .card-body
             .row
                 .col-6
-                    each item in filterStatus
-                        button(
-                            class=`btn btn-sm ml-1 btn-outline-success ${item.class}`
-                            button-status= item.status
-                        ) #{item.name}
+                    +filter-status(filterStatus)
+
                 .col-6
-                    form(id="form-search")
-                        .input-group
-                            input(
-                            type="text"
-                            placeholder="Nhập từ khóa"
-                            name="keyword"
-                            class="form-control"
-                            )
-                            .input-group-append
-                                button(
-                                    class="btn btn-success"
-                                    type="submit"
-                                ) Tìm
+                    +search-status(keyword)
+
 
 
     .card.mb-3
         table.table.table-hover.table-sm
-                thead
-                    tr 
-                        th STT
-                        th Hình ảnh
-                        th Tiêu đề
-                        th Giá
-                        th Trạng thái
-                        th Hành động
-                tbody 
-                each item, index in products
-                    tr
-                        td #{index + 1}
-                        td
-                            img(src=""
-                            alt=""
-                            width="100px"
-                            height="auto"
-                            )
-                        td #{item.title}
-                        td #{item.price}$
-                        td 
-                            if(item.status == "active")
-                                a(href="#" class="badge bg-success") Hoạt động 
-                            else
-                                a(href="#" class="badge bg-danger") Dừng hoạt động 
+            thead
+                tr 
+                    th STT
+                    th Hình ảnh
+                    th Tiêu đề
+                    th Giá
+                    th Trạng thái
+                    th Hành động
+            tbody 
+            each item, index in products
+                tr
+                    td #{index + 1}
+                    td
+                        img(src=""
+                        alt=""
+                        width="100px"
+                        height="auto"
+                        )
+                    td #{item.title}
+                    td #{item.price}$
+                    td 
+                        if(item.status == "active")
+                            button(
+                                class="badge bg-success"
+                                data-status = item.status
+                                data-id = item.id
+                                button-change-status
+                                ) Hoạt động 
+                        else
+                            button(
+                                data-status = item.status
+                                class="badge bg-danger"
+                                data-id = item.id
+                                button-change-status
+                                ) Dừng hoạt động 
 
-                        td
-                            button(class="btn btn-warning btn-sm") Sửa
-                            button(class="btn btn-danger btn-sm ml-1") Sửa
+                    td
+                        button(class="btn btn-warning btn-sm") Sửa
+                        button(class="btn btn-danger btn-sm ml-1") xóa
+
+
+    nav
+        ul(class="pagination")
+            if(pagination.currentPage > 1)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination = pagination.currentPage - 1                  
+                        ) Trang trước 
+            
+            - for (var i = 1; i<= pagination.totalPage; i++)
+                li(class=`page-item ${pagination.currentPage == i ? "active" : "" }`)
+                    button(
+                        class="page-link"
+                        button-pagination=i
+                        ) #{i}
+
+            if(pagination.currentPage < pagination.totalPage)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination = pagination.currentPage + 1
+                        
+                        ) Kế tiếp
+        
+                li(class="page-item")
+                        button(
+                            class="page-link"
+                            button-pagination = pagination.totalPage 
+                            
+                            ) Trang cuối
+    //- Mục đích tạo ra form để khi submit url truyền là http://localhost:3000/admin/products/change-status/active/690f0f1d8e1e75dd02ee9983? 
+    //- form ẩn
+    //- sau khi dùng method-override đổi get thành post
+    form(
+        action="", 
+        method="POST"
+        id="form-change-status"
+        data-path=`${prefixAdmin}/products/change-status`
+        
+        ) 
+ 
+    script(src="/admin/js/product.js") 

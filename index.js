@@ -13,8 +13,13 @@ const route = require("./routes/client/index.route")
 // import routes admin
 const routeAdmin = require("./routes/admin/index.route")
 
+// import thằng method-override
+var methodOverride = require('method-override')
 
 const app = express(); // toàn bộ chương trình
+
+// import thằng method-override (ghi sau biến app)
+app.use(methodOverride('_method'))
 
 const port = process.env.PORT; // port = 3000
 

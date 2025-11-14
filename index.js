@@ -21,6 +21,9 @@ const app = express(); // toàn bộ chương trình
 // import thằng method-override (ghi sau biến app)
 app.use(methodOverride('_method'))
 
+// import bodyparser
+const bodyParser = require('body-parser')
+
 const port = process.env.PORT; // port = 3000
 
 app.set("views", "./views");
@@ -30,6 +33,8 @@ app.set("view engine", "pug");
 const systemConfig = require("./config/system")
 // Đặt tên biến là prefixAdmin
 app.locals.prefixAdmin = systemConfig.prefixAdmin // /ADMIN
+
+app.use(bodyParser.urlencoded())
 
 // Routes
 route(app)

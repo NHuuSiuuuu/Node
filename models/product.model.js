@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   status: String,
   position: Number,
   deleted: Boolean,
+  deletedAt: Date,
 });
 
 // Tạo medel từ schema giúp thêm sửa xóa lấy sản phẩm bà không cầ viết lệnh trực tiếp trong MonggoDB

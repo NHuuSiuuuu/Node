@@ -49,6 +49,7 @@ module.exports.product = async (req, res) => {
   objectPagination.totalPage = totalPage;
 
   const products = await Product.find(find)
+    .sort({position: "desc"})
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
@@ -70,6 +71,7 @@ module.exports.product = async (req, res) => {
 // [PATCH] Chức năng thay đổi trạng thái sản phẩm  /change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
   console.log(req.params);
+
   const status = req.params.status;
   const id = req.params.id;
 
@@ -98,21 +100,62 @@ module.exports.changeMulti = async (req, res) => {
       await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
 
       break;
+    case "delete-all":
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        { deleted: true ,
+          deletedAt: new Date(),
+
+        }
+      );   
+      break;
+
+    case "change-position":
+      // console.log(ids)
+      // Vì phần update khác nhau lên dùng for không dùng $in
+      for(const item of ids) {
+        //  cắt chuỗi thành mảng - tách mỗi phần tử là 1 mảng
+        let [id, position] = item.split('-') // sử dụng destructuring [ '6911b746b0fd2b52c6673473', '1' ]
+        position = parseInt(position)
+
+        await Product.updateOne({ _id:  id }, { position: position });
+
+
+        // console.log(id)
+        // console.log(position)
+      }
+      
+      break;
 
     default:
       break;
   }
   console.log(type);
-  console.log(ids);
+  // console.log(ids);
   res.redirect(req.get("Referer") || "/admin/products");
 };
 
-// Xóa sản phẩm
-module.exports.deleteItem = async(req, res)=> {
-  const id = req.params.id
-  const status = req.params.status
+// Xóa vĩnh viễn sản phẩm
+module.exports.deleteItem = async (req, res) => {
+  const id = req.params.id;
 
-  await Product.deleteOne({_id: id}, {status: status})
-  res.redirect(req.get("Referer") || "/admin/products")
+  // Xóa cứng
+  // await Product.deleteOne({_id: id}, {status: status})
 
-}
+  // Xóa mềm = cách thay đỏi trường deleted: true - tức là ẩn nó đi thôi
+  // Thăng mongoDB lưu Date theo giờ quốc tế UTC
+  // Convert sang Việtt Nam cài thư viện npm install moment-timezone
+  const moment = require("moment-timezone");
+  const deletedAtVN = moment().tz("Asia/Ho_Chi_Minh").toDate();
+
+  await Product.updateOne(
+    { _id: id },
+    {
+      deleted: true,
+      //  deletedAt: new Date()
+      deletedAt: deletedAtVN,
+    }
+  );
+
+  res.redirect(req.get("Referer") || "/admin/products");
+};

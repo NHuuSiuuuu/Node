@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
+const slug = require("mongoose-slug-updater");
+mongoose.plugin(slug);
 
 // Schema: Định nghĩa cấi trúc dữ liệu sản phẩm, định nghĩa sản phẩm có trường gì
 // Schema giúp Mongoose kiểm soát dữ liệu trước khi lưu vào database
 const productSchema = new mongoose.Schema(
   {
-    title: String,
+    title: String, // sản phẩm 1
     description: String,
     price: Number,
     discountPercentage: Number,
@@ -12,6 +14,11 @@ const productSchema = new mongoose.Schema(
     thumbnail: String,
     status: String,
     position: Number,
+    slug: {
+      type: String,
+      slug: "title", // san-pham-1
+      unique: true   // chỉ tạo slug duy nhất
+    },
     deleted: {
       type: Boolean,
       default: false,
@@ -24,13 +31,13 @@ const productSchema = new mongoose.Schema(
 );
 
 //  timestamps: true
-// bằng với 
+// bằng với
 /**
  * timestamps: {
  * createAt: 'created_at',
  * updateAt: 'updated_at
  * }
- * 
+ *
  */
 
 // Tạo medel từ schema giúp thêm sửa xóa lấy sản phẩm bà không cầ viết lệnh trực tiếp trong MonggoDB

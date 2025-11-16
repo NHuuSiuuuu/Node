@@ -183,6 +183,8 @@ module.exports.createItem = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
+  console.log(req.file)
+
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -195,11 +197,14 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
+  // Lưu vào trường thumbnail
+  req.body.thumbnail = `/uploads/${req.file.filename}`
+
   // Tạo mới Product
   const product = new Product(req.body)
   await product.save()
 
-  console.log(req.body);
+  // console.log(req.body);
   res.redirect(`${systemConfig.prefixAdmin}/products`)
 };
 

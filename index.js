@@ -24,6 +24,9 @@ app.use(methodOverride('_method'))
 // import bodyparser
 const bodyParser = require('body-parser')
 
+// import thư viện multer
+const multer  = require('multer')
+
 // import thư viện express-flash
 const flash = require('express-flash')
 const cookieParser = require('cookie-parser')

@@ -1,24 +1,26 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+const multer = require("multer");
+const storageMulter = require("../../helpers/storageMulter")
+const upload = multer({ storage: storageMulter() });
 
-const controller = require("../../controllers/admin/product.controller")
+const controller = require("../../controllers/admin/product.controller");
 
-router.get("/", controller.product)
+router.get("/", controller.product);
 
 // route động dùng :
 // router.get("/change-status/:status/:id", controller.changeStatus)
 
 // Thêm method-override phải đổi get sang patch
-router.patch("/change-status/:status/:id", controller.changeStatus)
+router.patch("/change-status/:status/:id", controller.changeStatus);
 
-router.patch("/change-multi", controller.changeMulti)
+router.patch("/change-multi", controller.changeMulti);
 
-router.delete("/delete/:id", controller.deleteItem)
+router.delete("/delete/:id", controller.deleteItem);
 
 // get này để chuyển sang trang
- router.get("/create", controller.createItem)
+router.get("/create", controller.createItem);
 
-router.post("/create", controller.createPost)
+router.post("/create", upload.single("thumbnail"), controller.createPost);
 
-
-module.exports = router
+module.exports = router;

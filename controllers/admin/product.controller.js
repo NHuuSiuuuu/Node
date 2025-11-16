@@ -70,13 +70,16 @@ module.exports.product = async (req, res) => {
 
 // [PATCH] Chức năng thay đổi trạng thái sản phẩm  /change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
 
   const status = req.params.status;
   const id = req.params.id;
 
   // Update 1 sản phẩm dunngf updateOne - nhận 2 đối số - đối số đầu là id - đối số 2 là trường muốn thay đổi
   await Product.updateOne({ _id: id }, { status: status });
+
+  // Flash
+  req.flash('success', 'Cập nhật trạng thái sản phẩm thành công!');
 
   // res.send(`${status} - ${id}`)
   // res.redirect("/admin/products")
@@ -94,10 +97,12 @@ module.exports.changeMulti = async (req, res) => {
   switch (type) {
     case "active":
       await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
-
+    // Flash
+      req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
       break;
     case "inactive":
       await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+      req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
 
       break;
     case "delete-all":
@@ -107,7 +112,9 @@ module.exports.changeMulti = async (req, res) => {
           deletedAt: new Date(),
 
         }
-      );   
+      );  
+      req.flash('success', `Xóa thành công ${ids.length} sản phẩm!`);
+
       break;
 
     case "change-position":
@@ -119,6 +126,8 @@ module.exports.changeMulti = async (req, res) => {
         position = parseInt(position)
 
         await Product.updateOne({ _id:  id }, { position: position });
+
+        req.flash('success', `Thay đổi vị trí thành công ${ids.length} sản phẩm!`);
 
 
         // console.log(id)

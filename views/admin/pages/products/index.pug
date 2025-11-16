@@ -1,9 +1,12 @@
 extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search-status.pug
+include ../../mixins/alert.pug
 
 
 block main
+    +alert-success(5000)
+
     h1 ADMIN Danh sách sản phẩm
 
     .card.mb-3
@@ -108,7 +111,7 @@ block main
                             class="btn btn-danger btn-sm ml-1"
                             data-id=item.id
                             button-delete
-                            
+
                             ) Xóa
 
 
@@ -120,7 +123,7 @@ block main
                         class="page-link"
                         button-pagination = pagination.currentPage - 1                  
                         ) Trang trước 
-            
+
             - for (var i = 1; i<= pagination.totalPage; i++)
                 li(class=`page-item ${pagination.currentPage == i ? "active" : "" }`)
                     button(
@@ -133,15 +136,15 @@ block main
                     button(
                         class="page-link"
                         button-pagination = pagination.currentPage + 1
-                        
+
                         ) Kế tiếp
-        
+
                 li(class="page-item")
-                        button(
-                            class="page-link"
-                            button-pagination = pagination.totalPage 
-                            
-                            ) Trang cuối
+                    button(
+                        class="page-link"
+                        button-pagination = pagination.totalPage 
+
+                        ) Trang cuối
     //- Mục đích tạo ra form để khi submit url truyền là http://localhost:3000/admin/products/change-status/active/690f0f1d8e1e75dd02ee9983? 
     //- form ẩn
     //- sau khi dùng method-override đổi get thành post
@@ -150,7 +153,7 @@ block main
         method="POST"
         id="form-change-status"
         data-path=`${prefixAdmin}/products/change-status`
-        
+
         ) 
 
     //- Form để delete sản phẩm
@@ -160,5 +163,5 @@ block main
         id="form-delete-status"
         data-path=`${prefixAdmin}/products/delete`
     ) 
- 
+
     script(src="/admin/js/product.js") 

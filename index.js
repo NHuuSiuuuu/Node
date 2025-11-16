@@ -24,17 +24,31 @@ app.use(methodOverride('_method'))
 // import bodyparser
 const bodyParser = require('body-parser')
 
+// import thư viện express-flash
+const flash = require('express-flash')
+const cookieParser = require('cookie-parser')
+const session = require("express-session")
+
 const port = process.env.PORT; // port = 3000
 
 app.set("views", "./views");
 app.set("view engine", "pug");
 
+// Khởi tạo Flash
+app.use(cookieParser('keyboard cat')); // Đọc cookie session ID từ trình duyệt
+app.use(session({ cookie: { maxAge: 60000 }})); // middleware lưu dữ liệu session trên server, cookie giúp liên kết session với clien
+app.use(flash()); // Dùng session này để lưu thông báo tạm thời
+/**
+ * Flash Message (thông báo tạm thời) không lưu trực tiếp trên cookie
+ * Cookie chỉ lưu session ID, để sever biết message nào của client nào
+ * Dữ liệu message thực sự nằm trên server, cookie chỉ là cầu nối
+ */
 // Biến toàn cục
 const systemConfig = require("./config/system")
 // Đặt tên biến là prefixAdmin
 app.locals.prefixAdmin = systemConfig.prefixAdmin // /ADMIN
 
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded())  // nên khai báo th này trước route
 
 // Routes
 route(app)

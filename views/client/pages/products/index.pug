@@ -15,7 +15,8 @@ block main
                         .inner-image
                             img(src=item.thumbnail, alt=item.title)
                         .inner-content
-                            h3.inner-title #{item.title}
+                            h3.inner-title 
+                                a(href=`/products/${item.slug}`) #{item.title}
                             .inner-price-old Giá cũ #{item.price}
                             .inner-price-new Giá mới #{item.priceNew}
                             .inner-discount Giảm giá -#{item.discountPercentage}%

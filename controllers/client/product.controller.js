@@ -19,3 +19,21 @@ module.exports.product = async (req, res) => {
     products: newProducts // gửi dữ liệu qua client/pages/products/index
   });
 };
+
+module.exports.detail = async (req, res) => {
+  try {
+    const find = {
+      deleted: false, // tìm sp chưa bị xóa
+      slug: req.params.slug, // tìm theo id
+    };
+
+    const product = await Product.findOne(find);
+    console.log(product);
+    res.render("client/pages/products/detail.pug", {
+      pageTitle: product.title,
+      product: product,
+    });
+  } catch (error) {
+    res.redirect(`/products`);
+  }
+}

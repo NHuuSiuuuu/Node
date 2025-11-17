@@ -34,7 +34,9 @@ const session = require("express-session")
 
 const port = process.env.PORT; // port = 3000
 
-app.set("views", "./views");
+// app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
+
 app.set("view engine", "pug");
 
 // Khởi tạo Flash
@@ -58,8 +60,8 @@ route(app)
 routeAdmin(app)
 
 // Nhúng file tĩnh: các file có thể xem được ở bên ngoài
-app.use(express.static('public'))
-
+// app.use(express.static('public')) // public để o ffline được nhưng online sẽ lỗi
+app.use(express.static(`${__dirname}/public`)) // biến này chạy đc cả local cả online
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

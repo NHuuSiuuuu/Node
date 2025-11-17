@@ -1,7 +1,7 @@
 //  [GET] /admin/products
 
 const Product = require("../../models/product.model");
-const systemConfig = require("../../config/system")
+const systemConfig = require("../../config/system");
 
 // import thằng filterStatus
 const filterStatusHelper = require("../../helpers/filterStatus");
@@ -194,25 +194,68 @@ module.exports.createPost = async (req, res) => {
   if (req.body.position == "") {
     const countProducts = await Product.estimatedDocumentCount();
     req.body.position = countProducts + 1;
-    console.log("Tổng sản phẩm",countProducts);
+    console.log("Tổng sản phẩm", countProducts);
   } else {
     req.body.position = parseInt(req.body.position);
   }
 
   // Lưu vào trường thumbnail
-  if(req.file){ // kiểm tra xem có file ảnh không
-    req.body.thumbnail = `/uploads/${req.file.filename}`
-  }else {
-    req.body.thumbnail = ``
-
+  if (req.file) {
+    // kiểm tra xem có file ảnh không
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  } else {
+    req.body.thumbnail = ``;
   }
 
   // Tạo mới Product
-  const product = new Product(req.body)
-  await product.save()
+  const product = new Product(req.body);
+  await product.save();
 
   // console.log(req.body);
-  res.redirect(`${systemConfig.prefixAdmin}/products`)
+  res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
 
-// END [CREATE] Thêm sản phẩm
+// [GET] /admin/products/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    // console.log(req.params.id);
+
+    const find = {
+      deleted: false, // tìm sp chưa bị xóa
+      _id: req.params.id, // tìm theo id
+    };
+
+    const product = await Product.findOne(find);
+    console.log(product);
+    res.render("admin/pages/products/edit.pug", {
+      pageTitle: "ADMIN Sửa sản phẩm",
+      product: product,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
+};
+
+// [PATCH] /admin/products/edit/:id
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  req.body.position = parseInt(req.body.position);
+
+  // update lại ảnh nếu có ảnh mới
+  if (req.file) { 
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+
+  try {
+    await Product.updateOne({ _id: id }, req.body);
+    req.flash("success", `Cập nhật thành cônng`);
+  } catch (error) {
+    req.flash("success", `Cập nhật thất bại`);
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
+  }
+
+  res.redirect(`${systemConfig.prefixAdmin}/products`);
+};

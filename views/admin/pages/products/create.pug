@@ -57,7 +57,10 @@ block main
                 min="0"
             )
 
-        div(class="form-group")
+        div(
+            class="form-group"
+            upload-image
+            )
             label(for="thumbnail") Ảnh
             input(
                 type="file"
@@ -65,6 +68,16 @@ block main
                 id="thumbnail"
                 name="thumbnail"
                 accept="image/*"
+                upload-image-input
+            )
+            button(
+                type="button"
+                delete-image-preview
+            ) Xóa
+            img(
+                src=""
+                image-preview
+                upload-image-preview
             )
                 //- accept="image/*" chỉ cho phép upload ảnh
         div(class="form-group")
@@ -87,7 +100,7 @@ block main
                 checked
             ) 
             label(for="statusActive" class="form-check-label") Hoạt động
-        
+
         div(class="form-group form-check form-check-inline")
             input(
                 type="radio"

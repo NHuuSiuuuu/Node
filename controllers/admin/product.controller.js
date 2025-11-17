@@ -185,14 +185,16 @@ module.exports.createItem = async (req, res) => {
 module.exports.createPost = async (req, res) => {
   console.log(req.file)
 
+  // convert những thằng này về int
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
 
+  // Tự động tăng position khi tạo mới sản phẩm
   if (req.body.position == "") {
     const countProducts = await Product.estimatedDocumentCount();
     req.body.position = countProducts + 1;
-    console.log(countProducts);
+    console.log("Tổng sản phẩm",countProducts);
   } else {
     req.body.position = parseInt(req.body.position);
   }

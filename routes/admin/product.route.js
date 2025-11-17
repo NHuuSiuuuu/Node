@@ -30,6 +30,7 @@ router.post(
     controller.createPost
 );
 
+// Sửa sản phẩm
 router.get("/edit/:id", controller.edit);
 
 router.patch(
@@ -39,6 +40,8 @@ router.patch(
     controller.editPatch
 );
 
+// Chi tiết sản phẩm
+router.get("/detail/:id", controller.detail);
 
 
 module.exports = router;

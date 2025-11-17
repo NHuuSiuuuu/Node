@@ -118,7 +118,11 @@ block main
                         a( 
                             href=`${prefixAdmin}/products/edit/${item.id}`
                             class="btn btn-warning btn-sm"
-                            ) Sửa
+                            ) Sửa                        
+                        a( 
+                            href=`${prefixAdmin}/products/detail/${item.id}`
+                            class="btn btn-secondary btn-sm"
+                            ) Chi tiết
                         button(
                             class="btn btn-danger btn-sm ml-1"
                             data-id=item.id

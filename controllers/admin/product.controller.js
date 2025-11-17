@@ -183,7 +183,7 @@ module.exports.createItem = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  console.log(req.file)
+  // console.log(req.file)
 
   // convert những thằng này về int
   req.body.price = parseInt(req.body.price);
@@ -200,7 +200,12 @@ module.exports.createPost = async (req, res) => {
   }
 
   // Lưu vào trường thumbnail
-  req.body.thumbnail = `/uploads/${req.file.filename}`
+  if(req.file){ // kiểm tra xem có file ảnh không
+    req.body.thumbnail = `/uploads/${req.file.filename}`
+  }else {
+    req.body.thumbnail = ``
+
+  }
 
   // Tạo mới Product
   const product = new Product(req.body)

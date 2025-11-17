@@ -6,6 +6,8 @@ const upload = multer({ storage: storageMulter() });
 
 const controller = require("../../controllers/admin/product.controller");
 
+const validate = require("../../validates/admin/product.validate")
+
 router.get("/", controller.product);
 
 // route động dùng :
@@ -21,6 +23,11 @@ router.delete("/delete/:id", controller.deleteItem);
 // get này để chuyển sang trang
 router.get("/create", controller.createItem);
 
-router.post("/create", upload.single("thumbnail"), controller.createPost);
+router.post(
+    "/create", 
+    upload.single("thumbnail"), 
+    validate.createPost,
+    controller.createPost
+);
 
 module.exports = router;

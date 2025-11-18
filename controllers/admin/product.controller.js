@@ -49,8 +49,25 @@ module.exports.product = async (req, res) => {
   const totalPage = Math.ceil(countProducts / objectPagination.limitItems);
   objectPagination.totalPage = totalPage;
 
+  // sort
+  let sort = {}
+  
+  // Lấy sortKey và sortValue trên URL
+  if(req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue //sort["price"] = "asc" convert sang obj {price: "asc"} - Đây là cách tạo obj với dynamic key
+//     const key = req.query.sortKey;
+//     const value = req.query.sortValue;
+//     sort[key] = value; 
+  }else {
+    sort.position = "desc"
+
+  }
+
+
+  // End sort
+
   const products = await Product.find(find)
-    .sort({ position: "desc" })
+    .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
@@ -214,7 +231,9 @@ module.exports.createPost = async (req, res) => {
   // console.log(req.body);
   res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
+// End [CREATE] Thêm sản phẩm
 
+// Hiển thị trang chỉnh sửa sản phẩm
 // [GET] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
   try {
@@ -236,7 +255,7 @@ module.exports.edit = async (req, res) => {
   }
 };
 
-// [PATCH] /admin/products/edit/:id
+// [PATCH] Chỉnh sửa sản phẩm /admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
   req.body.price = parseInt(req.body.price);

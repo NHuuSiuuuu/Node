@@ -9,9 +9,9 @@ const cloudinary = require("cloudinary").v2;
 
 // Config connect Cloudinary
 cloudinary.config({
-  cloud_name: "dhvyer5es",
-  api_key: "242975975721468",
-  api_secret: "YeK0NSU54GOAiUSJmacFfEaHm9o",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
 });
 
 // End Config Cloudinary
@@ -50,7 +50,7 @@ router.get("/edit/:id", controller.edit);
 
 router.patch(
   "/edit/:id",
-  upload.single("thumbnail"),
+  uploadCloud.upload,
   validate.createPost,
   controller.editPatch
 );

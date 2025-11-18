@@ -199,13 +199,13 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  // Lưu vào trường thumbnail
-  if (req.file) {
-    // kiểm tra xem có file ảnh không
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  } else {
-    req.body.thumbnail = ``;
-  }
+  // Lưu vào trường thumbnail ( Đoạn này chuyển sang controller upload online)
+  // if (req.file) {
+  //   // kiểm tra xem có file ảnh không
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+  // } else {
+  //   req.body.thumbnail = ``;
+  // }
 
   // Tạo mới Product
   const product = new Product(req.body);

@@ -24,24 +24,23 @@ module.exports.index = async (req, res) => {
     deleted: false,
   };
 
-  let count = 0
-    function createTree(arr, parentId = "") {
-    const tree = [];                      
-    arr.forEach((item) => {             
-      if (item.parent_id === parentId) {  
+  let count = 0;
+  function createTree(arr, parentId = "") {
+    const tree = [];
+    arr.forEach((item) => {
+      if (item.parent_id === parentId) {
         count++;
         const newItem = item;
         newItem.index = count;
-        const children = createTree(arr, item.id); 
-        if (children.length > 0) {                
-          newItem.children = children;             
+        const children = createTree(arr, item.id);
+        if (children.length > 0) {
+          newItem.children = children;
         }
-        tree.push(newItem);                      
+        tree.push(newItem);
       }
     });
-    return tree;                                  
+    return tree;
   }
-
 
   // Nếu có status trên URL
   if (req.query.status) {
@@ -93,8 +92,7 @@ module.exports.index = async (req, res) => {
     .skip(objectPagination.skip)
     .limit(objectPagination.limitItem);
 
-  const newRecords = createTree(records)
-
+  const newRecords = createTree(records);
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "ADMIN Danh mục sản phẩm",
@@ -122,24 +120,27 @@ module.exports.create = async (req, res) => {
   };
 
   function createTree(arr, parentId = "") {
-    const tree = [];                      // Mảng chứa các node của level hiẹn tại
-    arr.forEach((item) => {               // Duyệt qua toàn bộ danh sách category danh mục sản phẩm
-      if (item.parent_id === parentId) {  // Tìm những record có parent_id = "" - tức là những thằng cấp cao nhất
+    const tree = []; // Mảng chứa các node của level hiẹn tại
+    arr.forEach((item) => {
+      // Duyệt qua toàn bộ danh sách category danh mục sản phẩm
+      if (item.parent_id === parentId) {
+        // Tìm những record có parent_id = "" - tức là những thằng cấp cao nhất
         const newItem = item;
         const children = createTree(arr, item.id); // Gọi đệ quy để tìm các danh mục có parent_id = item.id (tức là tmf con của nó)
-        if (children.length > 0) {                 // Nếu có con
-          newItem.children = children;             // gán mảng con vào thuộc tính children
+        if (children.length > 0) {
+          // Nếu có con
+          newItem.children = children; // gán mảng con vào thuộc tính children
         }
-        tree.push(newItem);                        // Thêm node (kèm children nếu có) vào mảng có kết quả
+        tree.push(newItem); // Thêm node (kèm children nếu có) vào mảng có kết quả
       }
     });
-    return tree;                                    // Trả về cây phân cấp cho level hiện tại
+    return tree; // Trả về cây phân cấp cho level hiện tại
   }
 
   const records = await ProductCategory.find(find);
-  const newRecords = createTree(records)
-  console.log("records",records)
-  console.log("newRecords",newRecords)
+  const newRecords = createTree(records);
+  console.log("records", records);
+  console.log("newRecords", newRecords);
 
   res.render("admin/pages/products-category/create", {
     pageTitle: "ADMIN tạo danh mục sản phẩm",

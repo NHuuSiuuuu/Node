@@ -7,6 +7,7 @@ mongoose.plugin(slug);
 const productCategorySchema = new mongoose.Schema(
   {
     title: String, // sản phẩm 1
+    parent_id: String,
     description: {
         type: String,
         default: ""

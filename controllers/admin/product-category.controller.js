@@ -105,7 +105,7 @@ module.exports.index = async (req, res) => {
 
 // [PATH] Thay đổi trạng thái danh mục
 module.exports.changeStatus = async (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   const status = req.params.status;
   const id = req.params.id;
 
@@ -139,8 +139,8 @@ module.exports.create = async (req, res) => {
 
   const records = await ProductCategory.find(find);
   const newRecords = createTree(records);
-  console.log("records", records);
-  console.log("newRecords", newRecords);
+  // console.log("records", records);
+  // console.log("newRecords", newRecords);
 
   res.render("admin/pages/products-category/create", {
     pageTitle: "ADMIN tạo danh mục sản phẩm",

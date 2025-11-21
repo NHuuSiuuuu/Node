@@ -1,6 +1,7 @@
 //  [GET] /admin/products
 
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
 
 // import thằng filterStatus
@@ -50,19 +51,17 @@ module.exports.product = async (req, res) => {
   objectPagination.totalPage = totalPage;
 
   // sort
-  let sort = {}
-  
+  let sort = {};
+
   // Lấy sortKey và sortValue trên URL
-  if(req.query.sortKey && req.query.sortValue) {
-    sort[req.query.sortKey] = req.query.sortValue //sort["price"] = "asc" convert sang obj {price: "asc"} - Đây là cách tạo obj với dynamic key
-//     const key = req.query.sortKey;
-//     const value = req.query.sortValue;
-//     sort[key] = value; 
-  }else {
-    sort.position = "desc"
-
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue; //sort["price"] = "asc" convert sang obj {price: "asc"} - Đây là cách tạo obj với dynamic key
+    //     const key = req.query.sortKey;
+    //     const value = req.query.sortValue;
+    //     sort[key] = value;
+  } else {
+    sort.position = "desc";
   }
-
 
   // End sort
 
@@ -162,7 +161,7 @@ module.exports.changeMulti = async (req, res) => {
     default:
       break;
   }
-  console.log(type);
+  // console.log(type);
   // console.log(ids);
   res.redirect(req.get("Referer") || "/admin/products");
 };
@@ -194,8 +193,31 @@ module.exports.deleteItem = async (req, res) => {
 
 // [CREATE] Thêm sản phẩm
 module.exports.createItem = async (req, res) => {
+  const id = req.params.id;
+  const find = {
+    deleted: false,
+  };
+
+  function createTree(arr, parentId = "") {
+    const tree = [];
+    arr.forEach((item) => {
+      if (item.parent_id === parentId) {
+        const newItem = item;
+        const children = createTree(arr, item.id);
+        if (children.length > 0) {
+          newItem.children = children;
+        }
+        tree.push(newItem);
+      }
+    });
+    return tree;
+  }
+  const category = await ProductCategory.find(find);
+  const newCategory = createTree(category);
+
   res.render("admin/pages/products/create.pug", {
     pageTitle: "ADMIN Thêm mới sản phẩm",
+    category: newCategory,
   });
 };
 
@@ -211,7 +233,7 @@ module.exports.createPost = async (req, res) => {
   if (req.body.position == "") {
     const countProducts = await Product.estimatedDocumentCount();
     req.body.position = countProducts + 1;
-    console.log("Tổng sản phẩm", countProducts);
+    // console.log("Tổng sản phẩm", countProducts);
   } else {
     req.body.position = parseInt(req.body.position);
   }
@@ -245,7 +267,7 @@ module.exports.edit = async (req, res) => {
     };
 
     const product = await Product.findOne(find);
-    console.log(product);
+    // console.log(product);
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "ADMIN Sửa sản phẩm",
       product: product,
@@ -264,7 +286,7 @@ module.exports.editPatch = async (req, res) => {
   req.body.position = parseInt(req.body.position);
 
   // update lại ảnh nếu có ảnh mới
-  if (req.file) { 
+  if (req.file) {
     req.body.thumbnail = `/uploads/${req.file.filename}`;
   }
 
@@ -288,7 +310,7 @@ module.exports.detail = async (req, res) => {
     };
 
     const product = await Product.findOne(find);
-    console.log(product);
+    // console.log(product);
     res.render("admin/pages/products/detail.pug", {
       pageTitle: product.title,
       product: product,

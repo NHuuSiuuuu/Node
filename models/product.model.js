@@ -7,6 +7,10 @@ mongoose.plugin(slug);
 const productSchema = new mongoose.Schema(
   {
     title: String, // sản phẩm 1
+    category_id: {
+      type: String,
+      default: "",
+    },
     description: String,
     price: Number,
     discountPercentage: Number,
@@ -17,7 +21,7 @@ const productSchema = new mongoose.Schema(
     slug: {
       type: String,
       slug: "title", // san-pham-1
-      unique: true   // chỉ tạo slug duy nhất
+      unique: true, // chỉ tạo slug duy nhất
     },
     deleted: {
       type: Boolean,

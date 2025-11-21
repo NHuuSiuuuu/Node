@@ -25,5 +25,14 @@ router.patch("/change-status/:status/:id", controller.changeStatus);
 // Chi tiết danh mục sản phẩm
 router.get("/detail/:id", controller.detail);
 
+// Sửa danh mục sản phẩm
+router.get("/edit/:id", controller.edit);
+router.patch(
+  "/edit/:id",
+  upload.single("thumbnail"),
+  uploadCloud.upload,
+  validate.createPost,
+  controller.editPatch
+);
 
 module.exports = router;

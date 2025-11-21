@@ -73,7 +73,7 @@ module.exports.index = async (req, res) => {
   // Chức năng phân trang: Lấy ra skip, limit để lọc
   objectPagination = {
     currentPage: 1,
-    limitItem: 10,
+    limitItem: 20,
   };
   if (req.query.page) {
     objectPagination.currentPage = parseInt(req.query.page);
@@ -184,4 +184,61 @@ module.exports.detail = async (req, res) => {
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
+};
+
+// Sửa danh mục sản phẩm
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const find = {
+      deleted: false,
+      _id: id,
+    };
+    function createTree(arr, parentId = "") {
+      const tree = [];
+      arr.forEach((item) => {
+        if (item.parent_id === parentId) {
+          const newItem = item;
+          const children = createTree(arr, item.id);
+          if (children.length > 0) {
+            newItem.children = children;
+          }
+          tree.push(newItem);
+        }
+      });
+      return tree;
+    }
+    const records = await ProductCategory.find({ deleted: false });
+    // console.log(records);
+    const newRecords = createTree(records);
+
+    const data = await ProductCategory.findOne(find);
+    res.render("admin/pages/products-category/edit", {
+      pageTitle: "Chỉnh sửa danh mục sản phẩm",
+      category: data,
+      records: newRecords,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+};
+// [PATCH] Chỉnh sửa danh mục sản phẩm /admin/products-category/edit/:id
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+  req.body.position = parseInt(req.body.position);
+
+  // update lại ảnh nếu có ảnh mới
+  if (req.file) {
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+
+  try {
+    await ProductCategory.updateOne({ _id: id }, req.body);
+    req.flash("success", `Cập nhật thành cônng`);
+  } catch (error) {
+    req.flash("success", `Cập nhật thất bại`);
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+
+  res.redirect(`${systemConfig.prefixAdmin}/products-category`);
 };

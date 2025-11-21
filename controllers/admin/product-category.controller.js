@@ -167,3 +167,21 @@ module.exports.createPost = async (req, res) => {
   // console.log(req.body);
   res.redirect(`${systemConfig.prefixAdmin}/products-category`);
 };
+
+// Chi tiết sản phẩm
+module.exports.detail = async (req, res) => {
+  try {
+    const find = {
+      deleted: false, // tìm sp chưa bị xóa
+      _id: req.params.id, // tìm theo id
+    };
+
+    const records = await ProductCategory.findOne(find);
+    res.render("admin/pages/products-category/detail.pug", {
+      pageTitle: records.title,
+      category: records,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+};

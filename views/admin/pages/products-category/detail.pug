@@ -1,0 +1,37 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+
+block main
+    if(category.title) 
+        h1(class="mb-4") #{category.title}
+        
+
+
+    if(category.thumbnail) 
+        div(class="mb-4") 
+            img(
+                src= category.thumbnail
+                alt=category.title
+            )
+       
+    if(category.status) 
+        div(class="mb-4") 
+            span Trạng thái
+            if(category.status == "active")
+                span(class="bg bg-success") Hoạt động
+            else
+                span(class="bg bg-danger") Dừng hoạt động
+
+    if(category.position) 
+        div(class="mb-4") Vị trí <b> #{category.position} </b>
+
+    if(category.description) 
+        div(class="mb-4") !{category.description}
+
+    a(
+        href=`${prefixAdmin}/categorys/edit/${category.id}`
+        class="btn btn-warning"
+    ) Chỉnh sửa
+
+    script(src="/admin/js/category.js") 

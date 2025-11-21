@@ -22,4 +22,8 @@ router.post(
 // [PATCH] /change-status/:status/:id
 router.patch("/change-status/:status/:id", controller.changeStatus);
 
+// Chi tiết danh mục sản phẩm
+router.get("/detail/:id", controller.detail);
+
+
 module.exports = router;

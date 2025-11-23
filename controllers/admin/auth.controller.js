@@ -4,9 +4,15 @@ const systemConfig = require("../../config/system");
 const md5 = require("md5");
 
 module.exports.login = (req, res) => {
-  res.render("admin/pages/auth/login.pug", {
-    pageTitle: "Đăng nhập",
-  });
+  console.log(req.cookies.token);
+  //   Khi đăng nhập thành công rồi mà người dùng cố chuyển sang trang đăng nhập tài khoản thẻ render luôn về trang dashboard
+  if (req.cookies.token) {
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  } else {
+    res.render("admin/pages/auth/login.pug", {
+      pageTitle: "Đăng nhập",
+    });
+  }
 };
 
 module.exports.loginPost = async (req, res) => {

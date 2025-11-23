@@ -5,123 +5,128 @@ include ../../mixins/table-tree.pug
 
 block main
 
+    if(role.permissions.includes("product-category_view"))
 
-    h1 ADMIN Danh mục sản phẩm
+        h1 ADMIN Danh mục sản phẩm
 
-    .card.mb-3
-        .card-header Danh sách
-            .card-body
-                .row
-                    .col-6
-                        each item in filterStatus
-                            button(
-                                class=`btn btn-sm ml-1 btn-outline-success ${item.class}`
-                                button-status= item.status
-                            ) #{item.name}
-                    .col-6
-                        form(id="form-search")
-                            .input-group
-                                input(
-                                type="text"
-                                placeholder="Nhập từ khóa"
-                                name="keyword"
-                                class="form-control"
-                                value=keyword
-                                )
-                                .input-group-append
-                                    button(
-                                        class="btn btn-success"
-                                        type="submit"
-                                    ) Tìm
-
+        .card.mb-3
+            .card-header Danh sách
+                .card-body
                     .row
-                        .col-8
-                            form(
-                                action=`${prefixAdmin}/products/change-multi?_method=PATCH`
-                                method="POST"
-                                form-change-multi
-                            )
-                                .d-flex.align-items-start
-                                    .form-group
-                                        select(name="type" class="form-control")
-                                            option(disabled selected) -- Chọn hành động --
-                                            option(value="active") Hoạt động
-                                            option(value="inactive") Dừng hoạt động
-                                            option(value="delete-all") Xóa tất cả
-                                            option(value="change-position") Thay đổi vị trí
-                                    .form-group 
-                                        input(
-                                            type="text"
-                                            name="ids"
-                                            value=""
-                                            class="form-control"
-                                        )
-                                    button(type="submit" class="btn btn-primary") Áp dụng
+                        .col-6
+                            each item in filterStatus
+                                button(
+                                    class=`btn btn-sm ml-1 btn-outline-success ${item.class}`
+                                    button-status= item.status
+                                ) #{item.name}
+                        .col-6
+                            form(id="form-search")
+                                .input-group
+                                    input(
+                                    type="text"
+                                    placeholder="Nhập từ khóa"
+                                    name="keyword"
+                                    class="form-control"
+                                    value=keyword
+                                    )
+                                    .input-group-append
+                                        button(
+                                            class="btn btn-success"
+                                            type="submit"
+                                        ) Tìm
 
-                        .col-4
-                            a(
-                                href=`${prefixAdmin}/products-category/create`
-                                class = "btn btn-outline-success"
-                ) +Thêm mới
+                        .row
+                            .col-8
+                                form(
+                                    action=`${prefixAdmin}/products/change-multi?_method=PATCH`
+                                    method="POST"
+                                    form-change-multi
+                                )
+                                    .d-flex.align-items-start
+                                        .form-group
+                                            select(name="type" class="form-control")
+                                                option(disabled selected) -- Chọn hành động --
+                                                option(value="active") Hoạt động
+                                                option(value="inactive") Dừng hoạt động
+                                                option(value="delete-all") Xóa tất cả
+                                                option(value="change-position") Thay đổi vị trí
+                                        .form-group 
+                                            input(
+                                                type="text"
+                                                name="ids"
+                                                value=""
+                                                class="form-control"
+                                            )
+                                        button(type="submit" class="btn btn-primary") Áp dụng
+
+                            .col-4
+                                if(role.permissions.includes("product-category_create"))
+                                    a(
+                                        href=`${prefixAdmin}/products-category/create`
+                                        class = "btn btn-outline-success"
+                                    ) +Thêm mới
 
 
 
-        table(
-            class="table table-hover table-sm"
-            checkbox-multi
-        )
-            thead
-                tr 
-                    th 
-                        input(type="checkbox" name="checkall")
-                    th STT
-                    th Hình ảnh
-                    th Tiêu đề
-                    th Vị trí danh mục
-                    th Trạng thái
-                    th Hành động
-            tbody 
-                +table-tree(records)
-                        
-    nav
-        ul(class="pagination")
-            if(pagination.currentPage > 1)
-                li(class="page-item")
-                    button(
-                        class="page-link"
-                        button-pagination = pagination.currentPage - 1                  
-                        ) Trang trước 
+            table(
+                class="table table-hover table-sm"
+                checkbox-multi
+            )
+                thead
+                    tr 
+                        th 
+                            input(type="checkbox" name="checkall")
+                        th STT
+                        th Hình ảnh
+                        th Tiêu đề
+                        th Vị trí danh mục
+                        th Trạng thái
+                        th Hành động
+                tbody 
+                    +table-tree(records)
+                            
+        nav
+            ul(class="pagination")
+                if(pagination.currentPage > 1)
+                    li(class="page-item")
+                        button(
+                            class="page-link"
+                            button-pagination = pagination.currentPage - 1                  
+                            ) Trang trước 
 
-            - for (var i = 1; i<= pagination.totalPage; i++)
-                li(class=`page-item ${pagination.currentPage == i ? "active" : "" }`)
-                    button(
-                        class="page-link"
-                        button-pagination=i
-                        ) #{i}
+                - for (var i = 1; i<= pagination.totalPage; i++)
+                    li(class=`page-item ${pagination.currentPage == i ? "active" : "" }`)
+                        button(
+                            class="page-link"
+                            button-pagination=i
+                            ) #{i}
 
-            if(pagination.currentPage < pagination.totalPage)
-                li(class="page-item")
-                    button(
-                        class="page-link"
-                        button-pagination = pagination.currentPage + 1
+                if(pagination.currentPage < pagination.totalPage)
+                    li(class="page-item")
+                        button(
+                            class="page-link"
+                            button-pagination = pagination.currentPage + 1
 
-                        ) Kế tiếp
+                            ) Kế tiếp
 
-                li(class="page-item")
-                    button(
-                        class="page-link"
-                        button-pagination = pagination.totalPage 
+                    li(class="page-item")
+                        button(
+                            class="page-link"
+                            button-pagination = pagination.totalPage 
 
-                        ) Trang cuối
-    
-    
-    form(
-        action="", 
-        method="POST"
-        id="form-change-status"
-        data-path=`${prefixAdmin}/products-category/change-status`
+                            ) Trang cuối
+        
+        
+        form(
+            action="", 
+            method="POST"
+            id="form-change-status"
+            data-path=`${prefixAdmin}/products-category/change-status`
 
-        ) 
+            ) 
+    else
+
+
 
 
 

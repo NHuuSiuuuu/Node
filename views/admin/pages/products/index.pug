@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search-status.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 
 block main
@@ -143,8 +144,8 @@ block main
 
                         td 
                             p #{item.accountFullName}
-                            p #{moment(item.createBy.createAt).format('DD/MM/YYYY HH:mm:ss')}
-                            //- p #{item.createBy.createAt}
+                            +formatDateTime(item.createBy.createAt)
+
                         td
                             if(role.permissions.includes("product_create"))
                                 a( 

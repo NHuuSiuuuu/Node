@@ -99,6 +99,7 @@ block main
                         th Vị trí của sản phẩm
                         th Trạng thái
                         th Người tạo
+                        th Người cập nhật
                         th Hành động
                 tbody 
                 each item, index in products
@@ -144,7 +145,15 @@ block main
 
                         td 
                             p #{item.accountFullName}
-                            +formatDateTime(item.createBy.createAt)
+                            p
+                                +formatDateTime(item.createBy.createAt)
+
+                        td 
+                            - const updatedBy = item.updatedBy[item.updatedBy.length - 1]
+                            if(updatedBy)
+                                p #{updatedBy.accountFullName}
+                                p
+                                    +formatDateTime(updatedBy.updatedAt)
 
                         td
                             if(role.permissions.includes("product_create"))

@@ -72,12 +72,22 @@ module.exports.product = async (req, res) => {
     .skip(objectPagination.skip);
 
   for (const product of products) {
+    // Lấy ra thông tin người tạo
     const user = await Account.findOne({
       _id: product.createBy.account_id,
     });
     if (user) {
       product.accountFullName = user.fullName;
     }
+    // Lấy ra thông tin người cập nhật gần nhất (tức là lấy phần tử cuối cùng) : arr[length của mảng -1]
+    const updatedBy = (product.updatedBy[product.updatedBy.length - 1])
+    if(updatedBy) {
+      const userUpdated = await Account.findOne({
+        _id: updatedBy.account_id
+      })
+      updatedBy.accountFullName = userUpdated.fullName
+    }
+    console.log(product)
   }
 
   res.render(
@@ -102,8 +112,16 @@ module.exports.changeStatus = async (req, res) => {
   const status = req.params.status;
   const id = req.params.id;
 
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date(),
+  };
+
   // Update 1 sản phẩm dunngf updateOne - nhận 2 đối số - đối số đầu là id - đối số 2 là trường muốn thay đổi
-  await Product.updateOne({ _id: id }, { status: status });
+  await Product.updateOne(
+    { _id: id },
+    { status: status, $push: { updatedBy: updatedBy } }
+  );
 
   // Flash
   req.flash("success", "Cập nhật trạng thái sản phẩm thành công!");
@@ -121,9 +139,17 @@ module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
   const ids = req.body.ids.split(","); // convert chuỗi sang arr
 
+  const updatedBy = {
+    account_id: res.locals.user.id,
+    updatedAt: new Date(),
+  };
+
   switch (type) {
     case "active":
-      await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        { status: "active", $push: { updatedBy: updatedBy } }
+      );
       // Flash
       req.flash(
         "success",
@@ -131,7 +157,10 @@ module.exports.changeMulti = async (req, res) => {
       );
       break;
     case "inactive":
-      await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+      await Product.updateMany(
+        { _id: { $in: ids } },
+        { status: "inactive", $push: { updatedBy: updatedBy } }
+      );
       req.flash(
         "success",
         `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
@@ -161,7 +190,10 @@ module.exports.changeMulti = async (req, res) => {
         let [id, position] = item.split("-"); // sử dụng destructuring [ '6911b746b0fd2b52c6673473', '1' ]
         position = parseInt(position);
 
-        await Product.updateOne({ _id: id }, { position: position });
+        await Product.updateOne(
+          { _id: id },
+          { position: position, $push: { updatedBy: updatedBy } }
+        );
 
         req.flash(
           "success",
@@ -315,7 +347,18 @@ module.exports.editPatch = async (req, res) => {
   }
 
   try {
-    await Product.updateOne({ _id: id }, req.body);
+    const updatedBy = {
+      account_id: res.locals.user.id,
+      updatedAt: new Date(),
+    };
+
+    await Product.updateOne(
+      { _id: id },
+      {
+        ...req.body,
+        $push: { updatedBy: updatedBy }, // $push - toán tử của mongoDB nó đẩy thêm 1 phần tử vào mảng giống arrr.push. ở đây đẩy 1 obj vào mảng udateby
+      }
+    );
     req.flash("success", `Cập nhật thành cônng`);
   } catch (error) {
     req.flash("success", `Cập nhật thất bại`);

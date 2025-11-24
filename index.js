@@ -6,6 +6,9 @@ require("dotenv").config();
 // import path để dùng tinyMCE
 const path = require("path");
 
+// import thư viện moment để xử lý thời gian
+const moment = require("moment");
+
 // import mongoose
 const database = require("./config/database");
 database.connect();
@@ -55,6 +58,9 @@ app.use(flash()); // Dùng session này để lưu thông báo tạm thời
 const systemConfig = require("./config/system");
 // Đặt tên biến là prefixAdmin
 app.locals.prefixAdmin = systemConfig.prefixAdmin; // /ADMIN
+
+// Tạo biến moment local
+app.locals.moment = moment; 
 
 // TinyMCE
 app.use(

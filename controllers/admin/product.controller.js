@@ -3,6 +3,7 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
 const systemConfig = require("../../config/system");
+const Account = require("../../models/account.model");
 
 // import thằng filterStatus
 const filterStatusHelper = require("../../helpers/filterStatus");
@@ -69,6 +70,15 @@ module.exports.product = async (req, res) => {
     .sort(sort)
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
+
+  for (const product of products) {
+    const user = await Account.findOne({
+      _id: product.createBy.account_id,
+    });
+    if (user) {
+      product.accountFullName = user.fullName;
+    }
+  }
 
   res.render(
     "admin/pages/products/index.pug", // epress tự hiểu đường dẫn tương đối so với thư mục view
@@ -245,6 +255,11 @@ module.exports.createPost = async (req, res) => {
   // } else {
   //   req.body.thumbnail = ``;
   // }
+
+  // Trước khi tạo sản phẩm thì gán thêm key account_id = với id trong biến toàn cục user
+  req.body.createBy = {
+    account_id: res.locals.user.id,
+  };
 
   // Tạo mới Product
   const product = new Product(req.body);

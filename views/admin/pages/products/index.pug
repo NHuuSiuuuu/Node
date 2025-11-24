@@ -97,6 +97,7 @@ block main
                         th Giá
                         th Vị trí của sản phẩm
                         th Trạng thái
+                        th Người tạo
                         th Hành động
                 tbody 
                 each item, index in products
@@ -140,6 +141,10 @@ block main
                                     button-change-status
                                     ) Dừng hoạt động 
 
+                        td 
+                            p #{item.accountFullName}
+                            p #{moment(item.createBy.createAt).format('DD/MM/YYYY HH:mm:ss')}
+                            //- p #{item.createBy.createAt}
                         td
                             if(role.permissions.includes("product_create"))
                                 a( 

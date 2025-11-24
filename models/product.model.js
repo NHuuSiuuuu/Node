@@ -23,6 +23,14 @@ const productSchema = new mongoose.Schema(
       slug: "title", // san-pham-1
       unique: true, // chỉ tạo slug duy nhất
     },
+    createBy: {
+      account_id: String,
+      // Thời gian tạo
+      createAt: {
+        type: Date,
+        default: Date.now,
+      },
+    },
     deleted: {
       type: Boolean,
       default: false,

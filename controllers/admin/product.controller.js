@@ -273,41 +273,47 @@ module.exports.createItem = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  // console.log(req.file)
+  const permissions = res.locals.role.permissions;
+  if (permissions.includes("products-category_create")) {
+    // console.log(req.file)
 
-  // convert những thằng này về int
-  req.body.price = parseInt(req.body.price);
-  req.body.discountPercentage = parseInt(req.body.discountPercentage);
-  req.body.stock = parseInt(req.body.stock);
+    // convert những thằng này về int
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
 
-  // Tự động tăng position khi tạo mới sản phẩm
-  if (req.body.position == "") {
-    const countProducts = await Product.estimatedDocumentCount();
-    req.body.position = countProducts + 1;
-    // console.log("Tổng sản phẩm", countProducts);
+    // Tự động tăng position khi tạo mới sản phẩm
+    if (req.body.position == "") {
+      const countProducts = await Product.estimatedDocumentCount();
+      req.body.position = countProducts + 1;
+      // console.log("Tổng sản phẩm", countProducts);
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+
+    // Lưu vào trường thumbnail ( Đoạn này chuyển sang controller upload online)
+    // if (req.file) {
+    //   // kiểm tra xem có file ảnh không
+    //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // } else {
+    //   req.body.thumbnail = ``;
+    // }
+
+    // Trước khi tạo sản phẩm thì gán thêm key account_id = với id trong biến toàn cục user
+    req.body.createBy = {
+      account_id: res.locals.user.id,
+    };
+
+    // Tạo mới Product
+    const product = new Product(req.body);
+    await product.save();
+
+    // console.log(req.body);
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
   } else {
-    req.body.position = parseInt(req.body.position);
+    res.send("403"); // máy chủ hiểu req từ client nhưng từ chối không cho phép truy cập
+    return;
   }
-
-  // Lưu vào trường thumbnail ( Đoạn này chuyển sang controller upload online)
-  // if (req.file) {
-  //   // kiểm tra xem có file ảnh không
-  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
-  // } else {
-  //   req.body.thumbnail = ``;
-  // }
-
-  // Trước khi tạo sản phẩm thì gán thêm key account_id = với id trong biến toàn cục user
-  req.body.createBy = {
-    account_id: res.locals.user.id,
-  };
-
-  // Tạo mới Product
-  const product = new Product(req.body);
-  await product.save();
-
-  // console.log(req.body);
-  res.redirect(`${systemConfig.prefixAdmin}/products`);
 };
 // End [CREATE] Thêm sản phẩm
 

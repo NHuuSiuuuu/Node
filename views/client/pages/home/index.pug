@@ -5,4 +5,20 @@ include ../../mixins/box-head.pug
 
 block main
     .container.my-3
-        #{layoutProductsCategory}
+        .row
+            .cow-12
+            +box-head('Sản phẩm nổi bật')
+               
+        .row
+            each item in productsFeatured
+                .col-4.mb-3
+                    .product-item
+                        .inner-image
+                            img(src=item.thumbnail, alt=item.title)
+                        .inner-content
+                            h3.inner-title 
+                                a(href=`/products/${item.slug}`) #{item.title}
+                            .inner-price-old Giá cũ #{item.price}
+                            .inner-price-new Giá mới #{item.priceNew}
+                            .inner-discount Giảm giá -#{item.discountPercentage}%
+                        

@@ -1,11 +1,11 @@
 // Định nghĩa đường dẫn gọi controller nào
+const categoryMiddleware = require("../../middlewares/client/category.middleware");
 
-const homeRoutes = require("./home.route")
-const productRoutes = require("./product.route")
+const homeRoutes = require("./home.route");
+const productRoutes = require("./product.route");
 
 module.exports = (app) => {
-  app.get("/", homeRoutes);
+  app.get("/", categoryMiddleware.category, homeRoutes);
 
-  app.use("/products", productRoutes)
-
+  app.use("/products", categoryMiddleware.category, productRoutes);
 };

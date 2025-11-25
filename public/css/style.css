@@ -8,7 +8,7 @@
   height: 40px;
 }
 
-.header .inner-menu ul {
+.header .inner-menu > ul {
   display: flex;
   list-style: none;
   margin: 0;
@@ -68,4 +68,41 @@
 .product-item .inner-discount {
   color: #27ae60;
   font-size: 0.9rem;
+}
+
+.sub-menu {
+  position: relative;
+  z-index: 999;
+}
+
+.inner-menu li.sub-menu > ul,
+.sub-menu ul {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: #eae9e9;
+  min-width: 180px;
+  display: none;
+}
+
+.sub-menu ul li {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.sub-menu ul li {
+  position: relative;
+}
+
+.sub-menu ul li ul {
+  right: 100%;
+  top: 0;
+}
+
+.inner-menu li.sub-menu:hover > ul,
+.sub-menu ul li:hover > ul {
+  display: block;
 }

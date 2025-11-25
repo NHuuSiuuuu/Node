@@ -80,14 +80,14 @@ module.exports.product = async (req, res) => {
       product.accountFullName = user.fullName;
     }
     // Lấy ra thông tin người cập nhật gần nhất (tức là lấy phần tử cuối cùng) : arr[length của mảng -1]
-    const updatedBy = (product.updatedBy[product.updatedBy.length - 1])
-    if(updatedBy) {
+    const updatedBy = product.updatedBy[product.updatedBy.length - 1];
+    if (updatedBy) {
       const userUpdated = await Account.findOne({
-        _id: updatedBy.account_id
-      })
-      updatedBy.accountFullName = userUpdated.fullName
+        _id: updatedBy.account_id,
+      });
+      updatedBy.accountFullName = userUpdated.fullName;
     }
-    console.log(product)
+    console.log(product);
   }
 
   res.render(
@@ -322,11 +322,33 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id, // tìm theo id
     };
 
+    const find1 = {
+      deleted: false,
+    };
+
+    function createTree(arr, parentId = "") {
+      const tree = [];
+      arr.forEach((item) => {
+        if (item.parent_id === parentId) {
+          const newItem = item;
+          const children = createTree(arr, item.id);
+          if (children.length > 0) {
+            newItem.children = children;
+          }
+          tree.push(newItem);
+        }
+      });
+      return tree;
+    }
+    const category = await ProductCategory.find(find1);
+    const newCategory = createTree(category);
+
     const product = await Product.findOne(find);
     // console.log(product);
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "ADMIN Sửa sản phẩm",
       product: product,
+      category: newCategory,
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);

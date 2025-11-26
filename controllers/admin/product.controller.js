@@ -274,7 +274,7 @@ module.exports.createItem = async (req, res) => {
 
 module.exports.createPost = async (req, res) => {
   const permissions = res.locals.role.permissions;
-  if (permissions.includes("products-category_create")) {
+  // if (permissions.includes("products-category_create")) {
     // console.log(req.file)
 
     // convert những thằng này về int
@@ -310,10 +310,10 @@ module.exports.createPost = async (req, res) => {
 
     // console.log(req.body);
     res.redirect(`${systemConfig.prefixAdmin}/products`);
-  } else {
-    res.send("403"); // máy chủ hiểu req từ client nhưng từ chối không cho phép truy cập
-    return;
-  }
+  // } else {
+  //   res.send("403"); // máy chủ hiểu req từ client nhưng từ chối không cho phép truy cập
+  //   return;
+  // }
 };
 // End [CREATE] Thêm sản phẩm
 

@@ -9,7 +9,7 @@ module.exports.home = async (req, res) => {
     featured: "1",
     deleted: false,
     status: "active",
-  }).limit(1); // láy ra bao nhiểu sản phẩm nổi bật thì set limit
+  }).limit(10); // láy ra bao nhiểu sản phẩm nổi bật thì set limit
   const newProducts = productsHelper.priceNewProducts(productsFeatured);
 
   res.render("client/pages/home/index", {

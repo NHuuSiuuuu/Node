@@ -34,7 +34,7 @@ module.exports.detail = async (req, res) => {
     };
 
     const product = await Product.findOne(find);
-    console.log(product);
+    // console.log(product);
     res.render("client/pages/products/detail.pug", {
       pageTitle: product.title,
       product: product,
@@ -45,7 +45,7 @@ module.exports.detail = async (req, res) => {
 };
 
 module.exports.category = async (req, res) => {
-  console.log(req.params.slugCategory);
+  // console.log(req.params.slugCategory);
 
   const category = await ProductCategory.findOne({
     slug: req.params.slugCategory,
@@ -81,7 +81,7 @@ module.exports.category = async (req, res) => {
 
   const listSubCategory = await productsCategoryHelper.getSubCategory(category.id);
   const listSubCategoryId = listSubCategory.map(item => item.id)
-  console.log(listSubCategoryId)
+  // console.log(listSubCategoryId)
 
   // Tìm ra những sản phẩm cùng id danh mục
   const products = await Product.find({

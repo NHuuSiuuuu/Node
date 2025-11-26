@@ -29,8 +29,8 @@ module.exports.product = async (req, res) => {
 module.exports.detail = async (req, res) => {
   try {
     const find = {
-      deleted: false, // tìm sp chưa bị xóa
-      slug: req.params.slug, // tìm theo id
+      slug: req.params.slugProduct, 
+      deleted: false,   
     };
 
     const product = await Product.findOne(find);

@@ -1,7 +1,7 @@
 const Cart = require("../../models/cart.model");
 
 module.exports.cartId = async (req, res, next) => {
-//   console.log(req.cookies.cartId);
+  //   console.log(req.cookies.cartId);
 
   if (!req.cookies.cartId) {
     // Tạo giỏ hàng
@@ -14,7 +14,18 @@ module.exports.cartId = async (req, res, next) => {
       expires: new Date(Date.now() + 8 * 3600000), // cookie will be removed after 8 hours
     });
   } else {
-    // Lấy ra thôi
+    // Lấy ra thông tin giỏ hàng
+    const cart = await Cart.findOne({
+      _id: req.cookies.cartId,
+    });
+
+    cart.toltalQuantity = cart.products.reduce(
+      (acc, curr) => acc + curr.quantity,
+      0
+    );
+    res.locals.miniCart = cart
+
+
   }
 
   next();

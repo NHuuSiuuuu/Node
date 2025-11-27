@@ -95,3 +95,23 @@ module.exports.addPost = async (req, res) => {
     res.redirect(req.get("Referer"));
   }
 };
+
+// Xóa sản phẩm trong giỏ hàng
+module.exports.delete = async (req, res) => {
+  const productId = req.params.productId;
+  const cartId = req.cookies.cartId;
+
+  await Cart.updateOne(
+    {
+      _id: cartId,
+    },
+    {
+      // pull: loại bỏ obj này khỏi mảng products
+      $pull: { products: { product_id: productId } }, // tìm trong mảng products - tìm những thằng có id như này và xóa
+    }
+  );
+
+  req.flash("success", "Đã xóa sản phẩm khỏi giỏ hàng!");
+
+  res.redirect(req.get("Referer"));
+};

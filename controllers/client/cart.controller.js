@@ -115,3 +115,24 @@ module.exports.delete = async (req, res) => {
 
   res.redirect(req.get("Referer"));
 };
+
+module.exports.update = async (req, res) => {
+  const productId = req.params.productId;
+  const cartId = req.cookies.cartId;
+  const quantity = req.params.quantity;
+
+  await Cart.updateOne(
+      {
+        _id: cartId, // truyền vào id giỏ hàng
+        "products.product_id": productId,
+      },
+      {
+        $set: {
+          "products.$.quantity": quantity,
+        },
+      }
+    );
+  req.flash("success", "Cập nhật số lượng thành công!");
+
+  res.redirect(req.get("Referer"));
+};

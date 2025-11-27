@@ -1,4 +1,41 @@
 const Cart = require("../../models/cart.model");
+const Product = require("../../models/product.model");
+const productsHelper = require("../../helpers/products");
+
+module.exports.index = async (req, res) => {
+  const cartId = req.cookies.cartId;
+
+  const cart = await Cart.findOne({
+    _id: cartId,
+  });
+
+  // cart trả về 1 mảng
+  if (cart.products.length > 0) {
+    for (const item of cart.products) {
+      const productInfo = await Product.findOne({
+        _id: item.product_id,
+      }).select("title thumbnail slug price discountPercentage");
+
+      productInfo.priceNew = productsHelper.priceNewProduct(productInfo);
+
+      item.productInfo = productInfo;
+
+      item.toltalPrice = productInfo.priceNew * item.quantity;
+    }
+  }
+  // Tổng giá tất cả sản phẩm trong giỏ hàng
+  cart.toltalPrice = cart.products.reduce(
+    (arr, curr) => arr + curr.quantity * curr.productInfo.priceNew,
+    0
+  );
+
+  console.log(cart);
+
+  res.render("client/pages/cart/index", {
+    pageTitle: "Giỏ hàng",
+    cartDetail: cart,
+  });
+};
 
 module.exports.addPost = async (req, res) => {
   const productId = req.params.productId;
@@ -15,8 +52,10 @@ module.exports.addPost = async (req, res) => {
   });
   //   console.log(cart.products);
   //   Check xem sản phẩm này đã có trong giỏ hàng chưa. Nếu có rồi thì chỉ tăng số lượng thôi
-  const existProductInCart = cart.products.find((item) => item.product_id == productId); // hàm find này là của js
-  console.log('existProductInCart', existProductInCart);
+  const existProductInCart = cart.products.find(
+    (item) => item.product_id == productId
+  ); // hàm find này là của js
+  // console.log("existProductInCart", existProductInCart);
 
   if (existProductInCart) {
     // Cập nhật lại

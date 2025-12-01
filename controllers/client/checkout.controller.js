@@ -30,7 +30,7 @@ module.exports.index = async (req, res) => {
     0
   );
 
-  console.log("Giỏ hàng:", cart);
+  // console.log("Giỏ hàng:", cart);
 
   res.render("client/pages/checkout/index", {
     pageTitle: "Đặt hàng",

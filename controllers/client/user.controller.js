@@ -1,5 +1,7 @@
 const md5 = require("md5");
 const User = require("../../models/user.model");
+const ForgotPassword = require("../../models/forgot-password.model");
+const generateHelper = require("../../helpers/generate");
 
 module.exports.register = async (req, res) => {
   res.render("client/pages/user/register", {
@@ -77,4 +79,43 @@ module.exports.loginPost = async (req, res) => {
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
   res.redirect("/");
+};
+
+// [GET] /user/forgotPassword
+module.exports.forgotPassword = async (req, res) => {
+  res.render("client/pages/user/forgot-password", {
+    pageTitle: "Lấy lại mật khẩu",
+  });
+};
+
+// [POST] /user/forgotPasswordPost
+module.exports.forgotPasswordPost = async (req, res) => {
+  const email = req.body.email;
+
+  const user = await User.findOne({
+    email: email,
+    deleted: false,
+  });
+
+  if (!user) {
+    req.flash("error", "Email không tồn tại!");
+    res.redirect(req.get("Referer"));
+    return;
+  }
+
+  //   Lưu thông tin vào database
+  const otp = generateHelper.generateRandomNumber(8);
+
+  const objectForgotPassword = {
+    email: email,
+    otp: otp,
+    expireAt: Date.now(),
+  };
+  console.log(objectForgotPassword);
+
+  const forgotPassword = new ForgotPassword(objectForgotPassword);
+  await forgotPassword.save();
+  //   Nếu tồn tại email thì gửi mã OTP qua email
+
+  res.send("ok");
 };

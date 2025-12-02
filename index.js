@@ -60,7 +60,7 @@ const systemConfig = require("./config/system");
 app.locals.prefixAdmin = systemConfig.prefixAdmin; // /ADMIN
 
 // Tạo biến moment local
-app.locals.moment = moment; 
+app.locals.moment = moment;
 
 // TinyMCE
 app.use(
@@ -73,6 +73,12 @@ app.use(bodyParser.urlencoded()); // nên khai báo th này trước route
 // Routes
 route(app);
 routeAdmin(app);
+
+app.use((req, res) => {
+  res.render("client/errors/404", {
+    pageTitle: "404 Not Found",
+  });
+});
 
 // Nhúng file tĩnh: các file có thể xem được ở bên ngoài
 // app.use(express.static('public')) // public để o ffline được nhưng online sẽ lỗi

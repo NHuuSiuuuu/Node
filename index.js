@@ -3,6 +3,10 @@ const express = require("express"); // import
 require("dotenv").config();
 // console.log(process.env.PORT)
 
+// Cấu hình cho thăng socket io
+const http = require("http");
+const { Server } = require("socket.io");
+
 // import path để dùng tinyMCE
 const path = require("path");
 
@@ -23,6 +27,17 @@ const routeAdmin = require("./routes/admin/index.route");
 var methodOverride = require("method-override");
 
 const app = express(); // toàn bộ chương trình
+
+// Socket IO
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+  console.log("a user connected", socket.id);
+});
+
+// End Socket IO
+
 
 // import thằng method-override (ghi sau biến app)
 app.use(methodOverride("_method"));
@@ -70,6 +85,10 @@ app.use(
 
 app.use(bodyParser.urlencoded()); // nên khai báo th này trước route
 
+// Nhúng file tĩnh: các file có thể xem được ở bên ngoài
+// app.use(express.static('public')) // public để o ffline được nhưng online sẽ lỗi
+app.use(express.static(`${__dirname}/public`)); // biến này chạy đc cả local cả online
+
 // Routes
 route(app);
 routeAdmin(app);
@@ -80,10 +99,6 @@ app.use((req, res) => {
   });
 });
 
-// Nhúng file tĩnh: các file có thể xem được ở bên ngoài
-// app.use(express.static('public')) // public để o ffline được nhưng online sẽ lỗi
-app.use(express.static(`${__dirname}/public`)); // biến này chạy đc cả local cả online
-
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

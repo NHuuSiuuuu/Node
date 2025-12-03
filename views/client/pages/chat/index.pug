@@ -1,0 +1,47 @@
+extends ../../layouts/default.pug 
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(5000)
+    +alert-error(5000)
+
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Chat")
+        .inner-body
+            .inner-incoming
+                .inner-name Em yếu
+                .inner-content
+                    | A ơi sanh nhà e nha
+            .inner-outgoing
+                .inner-content
+                    | Ok e iu
+
+            .inner-incoming
+                .inner-name Em yếu1
+                .inner-content
+                    | A ơi sanh nhà e nha1
+            .inner-outgoing
+                .inner-content
+                    | Ok e iu1
+            .inner-incoming
+                .inner-name Em yếu1
+                .inner-content
+                    | A ơi sanh nhà e nha1
+            .inner-outgoing
+                .inner-content
+                    | Ok e iu1
+        .inner-foot
+            form(
+                class="inner-form"
+                action=""
+            )
+                input(
+                    type="text"
+                    placeholder="Nhập nội dung ..."
+                    name="content"
+                )
+                button
+                    i.fa-solid.fa-paper-plane

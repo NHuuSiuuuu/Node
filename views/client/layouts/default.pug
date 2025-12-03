@@ -5,6 +5,7 @@ html
     head
         title #{pageTitle}
         link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css")
         link(rel="stylesheet", href="/css/style.css")
     body
         +alert-success(5000)
@@ -19,5 +20,10 @@ html
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"
         )
+        
+        //- Socket IO
+        script(src="/socket.io/socket.io.js") 
+        script(src="/js/socket.js") 
+
         script(src="/js/script.js")
 

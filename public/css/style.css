@@ -153,3 +153,119 @@
 [image-preview][src=""] {
   display: none;
 }
+
+/* ============================
+    CONTAINER CHÍNH
+============================ */
+.inner-body {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 15px;
+    background: #f3f5f7;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Scrollbar đẹp hơn */
+.inner-body::-webkit-scrollbar {
+    width: 6px;
+}
+.inner-body::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+/* ============================
+    TIN NHẮN INCOMING
+============================ */
+.inner-incoming {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    max-width: 75%;
+}
+
+.inner-incoming .inner-name {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.inner-incoming .inner-content {
+    background: #ffffff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border-top-left-radius: 2px;
+    font-size: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: fit-content;
+}
+
+/* ============================
+    TIN NHẮN OUTGOING (BÊN PHẢI)
+============================ */
+.inner-outgoing {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.inner-outgoing .inner-content {
+    background: #ff60a6;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border-top-right-radius: 2px;
+    font-size: 15px;
+    color: white;
+    max-width: 75%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* ============================
+    FOOTER FORM GỬI TIN NHẮN
+============================ */
+.inner-foot {
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.inner-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inner-form input[type="text"] {
+    flex: 1;
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.inner-form input[type="text"]:focus {
+    border-color: #ff60a6;
+}
+
+.inner-form button {
+    background: #ff60a6;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.inner-form button:hover {
+    opacity: 0.9;
+}
+
+.inner-form i {
+    font-size: 18px;
+}

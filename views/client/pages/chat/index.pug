@@ -9,14 +9,14 @@ block main
     .container.my-3
         .row
             .col-12
-                +box-head("Chat")
-        .inner-body
-            each chat in chats
-                div(class=(chat.user_id == user.id ? "inner-outgoing" : "inner-incoming"))
-                    if(chat.user_id != user.id)
-                        .inner-name #{chat.infoUser.fullName}
-                    .inner-content #{chat.content}
-                        
+                .chat(my-id=user.id)            
+                    .inner-body
+                        each chat in chats
+                            div(class=(chat.user_id == user.id ? "inner-outgoing" : "inner-incoming"))
+                                if(chat.user_id != user.id)
+                                    .inner-name #{chat.infoUser.fullName}
+                                .inner-content #{chat.content}
+                                    
 
         .inner-foot
             form(

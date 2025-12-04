@@ -67,17 +67,31 @@ if (buttonIcon) {
   };
 }
 // End Show Icon Chat
+
+// Insert Icon to Input
 const emojiPicker = document.querySelector("emoji-picker");
 if (emojiPicker) {
   // Lấy ra input
-  const inputChat = document.querySelector(".inner-form input[name='content']")
-  console.log(inputChat)
+  const inputChat = document.querySelector(".inner-form input[name='content']");
+  console.log(inputChat);
 
   emojiPicker.addEventListener("emoji-click", (e) => {
     const icon = e.detail.unicode;
-    inputChat.value = inputChat.value  + icon
+    inputChat.value = inputChat.value + icon;
   });
-}
-// Insert Icon to Input
 
+  // Input Keyup
+  inputChat.addEventListener("keyup", () => {
+    // Gửi lên server 1 cái sự kiện
+    socket.emit("CLIENT_SEND_TYPING", "show");
+  });
+  // End Input Keyup
+}
 // End Insert Icon to Input
+
+// SERVER_RETURN_TYPING
+socket.on("SERVER_RETURN_TYPING", (data) => {
+  console.log(data);
+});
+
+// End SERVER_RETURN_TYPING

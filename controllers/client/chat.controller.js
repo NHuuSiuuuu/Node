@@ -11,6 +11,7 @@ module.exports.index = async (req, res) => {
   // Thay vào đấy dùng once
   _io.once("connection", (socket) => {
     // console.log("a user connected", socket.id);
+    // Đoạn code này lắng nghe gửi tin nhắn lên
     socket.on("CLIENT_SEND_MESSAGE", async (content) => {
       // console.log(content);
       const chat = new Chat({
@@ -26,6 +27,18 @@ module.exports.index = async (req, res) => {
         content: content,
       });
     });
+
+    // Đoạn code này lắng nghe gửi typing lên
+    // Typing
+    socket.on("CLIENT_SEND_TYPING", async (type) => {
+      socket.broadcast.emit("SERVER_RETURN_TYPING", {
+        userId: userId,
+        fullName: fullName,
+        type: type,
+      });
+    });
+
+    // End Typing
   });
 
   // End Socket IO

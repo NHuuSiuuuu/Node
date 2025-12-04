@@ -20,11 +20,15 @@ html
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"
         )
+
+        //- emoji-picker-element
+        script(type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js") 
+        //- End emoji-picker-element
         
         //- Socket IO
         script(src="/socket.io/socket.io.js") 
         script(src="/js/socket.js") 
-        script(src="/js/chat.js") 
+        script(type="module" src="/js/chat.js") 
 
         script(src="/js/script.js")
 

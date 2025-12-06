@@ -325,3 +325,27 @@
     opacity: 0.1;
   }
 }
+/* Wrapper cho danh sách ảnh */
+.chat .inner-images {
+    display: flex;
+    flex-wrap: wrap;       /* Tự xuống dòng nếu nhiều ảnh */
+    gap: 6px;              /* Khoảng cách giữa các ảnh */
+    margin-top: 6px;
+}
+
+/* Ảnh bên trong */
+.chat .inner-images img {
+    width: 140px;          /* Kích thước ảnh preview */
+    height: 140px;
+    object-fit: cover;     /* Cắt ảnh cho đẹp */
+    border-radius: 10px;   /* Bo góc */
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #ddd;
+}
+
+/* Hover cho ảnh */
+.chat .inner-images img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}

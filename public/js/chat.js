@@ -2,16 +2,45 @@ import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm
 
 // CLIENT_SEND_MESSAGE
 const formSendData = document.querySelector(".inner-form");
+let images = [];
 if (formSendData) {
+  // File-upload-with-preview
+  document
+    .querySelector("#upload-images")
+    .addEventListener("change", function (e) {
+      const preview = document.querySelector("#preview-images");
+      preview.innerHTML = ""; // xoá preview cũ
+
+      images = [...e.target.files];
+
+      images.forEach((file) => {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.style.width = "80px";
+        img.style.marginRight = "8px";
+        img.style.marginTop = "8px";
+        img.style.borderRadius = "8px";
+        preview.appendChild(img);
+      });
+    });
+  // End File-upload-with-preview
   formSendData.addEventListener("submit", (e) => {
     e.preventDefault();
     const content = e.target.elements.content.value;
     console.log(content);
+    console.log(images);
 
     // Nếu người dùng nhập data thì mới gửi lên server
-    if (content) {
-      socket.emit("CLIENT_SEND_MESSAGE", content);
+    if (content || images.length > 0) {
+      socket.emit("CLIENT_SEND_MESSAGE", {
+        content: content,
+        images: images,
+      });
       e.target.elements.content.value = "";
+      // 🔥 RESET hình ảnh sau khi gửi
+      images = []; // xoá mảng ảnh
+      document.querySelector("#upload-images").value = ""; // reset input file
+      document.querySelector("#preview-images").innerHTML = ""; // xóa preview
 
       // Sau khi gửi xong thì gọi luôn hàm này để ẩn luôn typing
       socket.emit("CLIENT_SEND_TYPING", "hidden");
@@ -31,6 +60,8 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   const boxTyping = document.querySelector(".inner-list-typing");
 
   let htmlFullName = "";
+  let htmlContent = "";
+  let htmlImages = "";
 
   // Nếu id trùng vs id user
   if (myId == data.userId) {
@@ -39,11 +70,30 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
     div.classList.add("inner-incoming");
   }
+  if (data.content) {
+    htmlContent = `
+      <div class="inner-content">${data.content}</div>
+  `;
+  }
+      // <div class="inner-images">
+      //   <img src="https://res.cloudinary.com/dhvyer5es/image/upload/v1765033297/yfcildqav0gmhcqvsre5.jpg">
+      // </div>
+  // Dùng += để nối thêm. nó không bị ghi đè mà thêm nối đuôi vào chuỗi
+  if (data.image.length > 0) {
+    htmlImages += `<div class="inner-images">`;
+
+    for (const image of data.image) {
+      htmlImages += `<img src="${image}">`;
+    }
+
+    htmlImages += `</div>`;
+  }
 
   // htmlFullName = <div class="inner-name">${data.fullName}</div>
   div.innerHTML = `
       ${htmlFullName} 
-      <div class="inner-content">${data.content}</div>
+      ${htmlContent}
+      ${htmlImages}
   `;
 
   body.insertBefore(div, boxTyping); // tức là thằng div luôn đứng trước thằng boxTyping

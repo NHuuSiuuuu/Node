@@ -75,9 +75,9 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
       <div class="inner-content">${data.content}</div>
   `;
   }
-      // <div class="inner-images">
-      //   <img src="https://res.cloudinary.com/dhvyer5es/image/upload/v1765033297/yfcildqav0gmhcqvsre5.jpg">
-      // </div>
+  // <div class="inner-images">
+  //   <img src="https://res.cloudinary.com/dhvyer5es/image/upload/v1765033297/yfcildqav0gmhcqvsre5.jpg">
+  // </div>
   // Dùng += để nối thêm. nó không bị ghi đè mà thêm nối đuôi vào chuỗi
   if (data.image.length > 0) {
     htmlImages += `<div class="inner-images">`;
@@ -97,6 +97,11 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   `;
 
   body.insertBefore(div, boxTyping); // tức là thằng div luôn đứng trước thằng boxTyping
+
+  // Preview Images - viewjs xem toàn màn hình
+  const gallery = new Viewer(div); // ;ắng nghe cho thẻ dic mới tạo này thôi không cầ lắng nghe cả body
+
+
   body.scrollTop = bodyChat.scrollHeight; // Bằng chiều cao thằng scroll
 });
 
@@ -203,3 +208,11 @@ if (elementListTyping) {
 }
 
 // End SERVER_RETURN_TYPING
+
+// Preview Full Image
+const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
+if (bodyChatPreviewImage) {
+  const gallery = new Viewer(bodyChatPreviewImage);
+}
+
+// End Preview Full Image

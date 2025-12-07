@@ -349,3 +349,58 @@
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
+
+
+.box-user {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f7f7f7;
+  margin-bottom: 12px;
+  transition: 0.2s;
+}
+
+.box-user:hover {
+  background: #efefef;
+}
+
+.box-user .inner-avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 12px;
+}
+
+.box-user .inner-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%; 
+}
+
+.box-user .inner-info {
+  flex: 1;
+}
+
+.box-user .inner-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.box-user .inner-button button {
+  margin-right: 6px;
+}
+
+.box-user [btn-cancel-friend] {
+  display: none;
+}
+
+/* Khi có class add thì ẩn Nút kết b và hiện nút hủy */
+.box-user.add [btn-add-friend] {
+  display: none;
+}
+
+.box-user.add [btn-cancel-friend] {
+  display: inline-block;
+}

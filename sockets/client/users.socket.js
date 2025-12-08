@@ -47,5 +47,44 @@ module.exports = (res) => {
         );
       }
     });
+
+    // Chức năng hủy gửi yêu cầu
+        socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
+      const myUserID = res.locals.user.id;
+
+      // Xóa id của A trong accept của B
+      const existIdAinB = await User.findOne({
+        _id: userId, // Tìm ông B xem accept có ông A trong đấy chưa
+        acceptFriends: myUserID,
+      });
+
+      if (existIdAinB) {
+        await User.updateOne(
+          {
+            _id: userId,
+          },
+          {
+            $pull: { acceptFriends: myUserID },
+          }
+        );
+      }
+
+      // Xóa id của B vào request Friends của A
+      const existIdBinA = await User.findOne({
+        _id: myUserID, 
+        requestFriends: userId,
+      });
+
+      if (existIdBinA) {
+        await User.updateOne(
+          {
+            _id: myUserID,
+          },
+          {
+            $pull: { requestFriends: userId },
+          }
+        );
+      }
+    });
   });
 };

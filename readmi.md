@@ -12,6 +12,21 @@ Hướng dẫn làm chứ năng kết banj
 2. Khi A hủy gửi yêu cầu cho B
 -- Xóa id của A trong acceptFriends của B
 -- Xóa id của B trong requestFriends của A
+    1️⃣ { _id: { $ne: userId } }
+
+    $ne = "not equal" = khác
+
+    Loại bỏ chính bạn khỏi danh sách người dùng.
+
+    ➡️ Không hiển thị chính mình trong danh sách "người không phải bạn bè".
+
+    2️⃣ { _id: { $nin: requestFriends } }
+
+    $nin = "NOT IN" = không thuộc trong danh sách
+
+    requestFriends là danh sách những người bạn đã gửi lời mời kết bạn cho họ.
+
+    ➡️ Nghĩa là loại luôn những người bạn đã gửi request, để tránh trùng lặp.
 
 3.  Khi B từ chối kết bạn của A (Tương tự A hủy yêu cầu cho B)
 -- Xóa id của A trong acceptFriends của B

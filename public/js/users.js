@@ -1,89 +1,88 @@
 // Xử lý các yêu cầu kết bạn , hủy kết bạn
 
-// Chức năng gửi yêu cầu 
-const listBtnAddFriend = document.querySelectorAll("[btn-add-friend]")
-if(listBtnAddFriend.length > 0) {
-    listBtnAddFriend.forEach(button => {
-        button.addEventListener("click", ()=> {
+// Chức năng gửi yêu cầu
+const listBtnAddFriend = document.querySelectorAll("[btn-add-friend]");
+if (listBtnAddFriend.length > 0) {
+  listBtnAddFriend.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.add("add");
 
-           button.closest(".box-user").classList.add("add")
+      const userId = button.getAttribute("btn-add-friend");
+      // console.log(userId)
 
-            const userId = button.getAttribute("btn-add-friend")
-            // console.log(userId)
-
-            // Gửi id lên server
-            socket.emit("CLIENT_ADD_FRIEND", userId)
-
-
-        })
-    })
+      // Gửi id lên server
+      socket.emit("CLIENT_ADD_FRIEND", userId);
+    });
+  });
 }
 
+// Hết Chức năng gửi yêu cầu
 
-// Hết Chức năng gửi yêu cầu 
+// Chức năng hủy yêu cầu
+const listBtnCancelFriend = document.querySelectorAll("[btn-cancel-friend]");
+if (listBtnCancelFriend.length > 0) {
+  listBtnCancelFriend.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.remove("add");
 
-// Chức năng hủy yêu cầu 
-const listBtnCancelFriend = document.querySelectorAll("[btn-cancel-friend]")
-if(listBtnCancelFriend.length > 0) {
-    listBtnCancelFriend.forEach(button => {
-        button.addEventListener("click", ()=> {
+      const userId = button.getAttribute("btn-cancel-friend");
+      // console.log(userId)
 
-           button.closest(".box-user").classList.remove("add")
-
-            const userId = button.getAttribute("btn-cancel-friend")
-            // console.log(userId)
-
-            // Gửi id lên server
-            socket.emit("CLIENT_CANCEL_FRIEND", userId)
-
-
-        })
-    })
+      // Gửi id lên server
+      socket.emit("CLIENT_CANCEL_FRIEND", userId);
+    });
+  });
 }
 
-
-// Hết Chức năng hủy yêu cầu 
+// Hết Chức năng hủy yêu cầu
 
 // Chức năng từ chối kết bạn
-const listBtnRefuseFriend = document.querySelectorAll("[btn-refuse-friend]")
-if(listBtnRefuseFriend.length > 0) {
-    listBtnRefuseFriend.forEach(button => {
-        button.addEventListener("click", ()=> {
+const listBtnRefuseFriend = document.querySelectorAll("[btn-refuse-friend]");
+if (listBtnRefuseFriend.length > 0) {
+  listBtnRefuseFriend.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.add("refuse");
 
-           button.closest(".box-user").classList.add("refuse")
+      const userId = button.getAttribute("btn-refuse-friend");
+      // console.log(userId)
 
-            const userId = button.getAttribute("btn-refuse-friend")
-            // console.log(userId)
-
-            // Gửi id lên server
-            socket.emit("CLIENT_REFUSE_FRIEND", userId)
-
-
-        })
-    })
+      // Gửi id lên server
+      socket.emit("CLIENT_REFUSE_FRIEND", userId);
+    });
+  });
 }
-
 
 // Hết Chức năng từ chối kết bạn
 
 // Chức năng chấp nhận kết bạn
-const listBtnAcceptFriend = document.querySelectorAll("[btn-accept-friend]")
-if(listBtnAcceptFriend.length > 0) {
-    listBtnAcceptFriend.forEach(button => {
-        button.addEventListener("click", ()=> {
+const listBtnAcceptFriend = document.querySelectorAll("[btn-accept-friend]");
+if (listBtnAcceptFriend.length > 0) {
+  listBtnAcceptFriend.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.add("accepted");
 
-           button.closest(".box-user").classList.add("accepted")
+      const userId = button.getAttribute("btn-accept-friend");
+      // console.log(userId)
 
-            const userId = button.getAttribute("btn-accept-friend")
-            // console.log(userId)
-
-            // Gửi id lên server
-            socket.emit("CLIENT_ACCEPT_FRIEND", userId)
-
-
-        })
-    })
+      // Gửi id lên server
+      socket.emit("CLIENT_ACCEPT_FRIEND", userId);
+    });
+  });
 }
 
-
 // Hết Chức năng chấp nhận kết bạn
+
+// SERVER_RETURN_LENGTH_ACCEPT_LENGTH
+const badgeUsersAccept = document.querySelector("[badge-users-accept]");
+if (badgeUsersAccept) {
+  const userId = badgeUsersAccept.getAttribute("badge-users-accept");
+  socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
+    // Vì thằng emit.broadcast nó gửi hết cho A B C trừ chính nó. Làm cho thằng nào cũng nhận đươcc số lượng lời mời kết bạn
+    // Vì thế tạo 1 cờ ở đây để check
+    if (userId === data.userId) {
+      badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
+    }
+  });
+}
+
+// END SERVER_RETURN_LENGTH_ACCEPT_LENGTH

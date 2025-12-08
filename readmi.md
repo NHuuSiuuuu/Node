@@ -38,3 +38,19 @@ Hướng dẫn làm chứ năng kết banj
 -- trong acceptFirends của B Xóa id của A ( vì a là request)
 -- trong requestFirends của A Xóa id của B 
 -- Lưu ý: room_chat_id phải trùng nhau (Tạm thời chưa dùng đến)
+
+Giả sử:
+
+    A gửi lời mời kết bạn cho B
+
+    B nhấn chấp nhận
+
+    Khi đó:
+
+    Ở phía B (myUserID):
+
+    B phải xóa A khỏi acceptFriends
+
+    Ở phía A (userId):
+
+    A phải xóa B khỏi requestFriends

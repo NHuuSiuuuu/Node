@@ -46,6 +46,17 @@ module.exports = (res) => {
           }
         );
       }
+
+      // Lấy ra độ dài acceptFriend của B vầ trả về cho B (vì thằng được gửi mới có thông báo chứ thằng gửi có thông báo làm đéo gì)
+      const infoUser = await User.findOne({
+        _id: userId,
+      });
+      const lengthAcceptFriends = infoUser.acceptFriends.length;
+      // Trả về cho thằng B chứ không trả về cho thằng A
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userId,
+        lengthAcceptFriends: lengthAcceptFriends,
+      });
     });
 
     // Chức năng hủy gửi yêu cầu
@@ -54,7 +65,7 @@ module.exports = (res) => {
 
       // Xóa id của A trong accept của B
       const existIdAinB = await User.findOne({
-        _id: userId, // Tìm ông B xem accept có ông A trong đấy chưa
+        _id: userId, //Vì acceptFriends nằm trong tài khoản của người nhận lời mời (người B). Tìm ông B xem accept có ông A trong đấy chưa
         acceptFriends: myUserID,
       });
 
@@ -93,7 +104,7 @@ module.exports = (res) => {
 
       // Xóa id của A trong accept của B
       const existIdAinB = await User.findOne({
-        _id: myUserID,
+        _id: myUserID, // Vì acceptFriends nằm trong tài khoản của người nhận lời mời (người B).
         acceptFriends: userId,
       });
 

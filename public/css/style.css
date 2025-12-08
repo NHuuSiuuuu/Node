@@ -404,7 +404,7 @@
 .box-user [btn-cancel-friend] {
   display: inline-block;
 }
-.box-user.refuse [btn-deleted-friend] {
+.box-user [btn-deleted-friend] {
   display: none;
 }
 .box-user.refuse [btn-accept-friend] {
@@ -414,5 +414,22 @@
   display: none;
 }
 .box-user.refuse [btn-deleted-friend] {
+  display: inline-block;
+}
+/* Css nút chấp nhận */
+/* Band đầu ẩn nút đã chấp nhận */
+.box-user [btn-accepted-friend] {
+  display: none;
+}
+
+/* Khi có class accepted thì ẩn nút chấp nhận */
+.box-user.accepted [btn-accept-friend] {
+  display: none;
+}
+
+.box-user.accepted [btn-refuse-friend] {
+  display: none;
+}
+.box-user.accepted [btn-accepted-friend] {
   display: inline-block;
 }

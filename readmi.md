@@ -35,6 +35,6 @@ Hướng dẫn làm chứ năng kết banj
 4. Khi B chấp nhận kết bạn của A
 -- Thêm {user_id, room_chat_id} của A vào friendsList của B
 -- Thêm {user_id, room_chat_id} của B vào friendsList của A
--- Xóa id của A trong acceptFirends của B
--- Xóa id của B trong requestFirends của A
+-- trong acceptFirends của B Xóa id của A ( vì a là request)
+-- trong requestFirends của A Xóa id của B 
 -- Lưu ý: room_chat_id phải trùng nhau (Tạm thời chưa dùng đến)

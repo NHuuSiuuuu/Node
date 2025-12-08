@@ -16,8 +16,8 @@ block main
                     .inner-body
                         each chat in chats
                             div(class=(chat.user_id == user.id ? "inner-outgoing" : "inner-incoming"))
-                                if(chat.user_id != user.id)
-                                    .inner-name #{chat.infoUser.fullName}
+                                //- if(chat.user_id != user.id)
+                                //-     .inner-name #{chat.infoUser.fullName}
                                 if(chat.content)
                                     .inner-content #{chat.content}
                                 if(chat.image)

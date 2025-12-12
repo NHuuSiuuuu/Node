@@ -105,6 +105,23 @@ module.exports = (res) => {
           }
         );
       }
+      // Lấy ra độ dài acceptFriend của B vầ trả về cho B (vì thằng được gửi mới có thông báo chứ thằng gửi có thông báo làm đéo gì)
+      const infoUserB = await User.findOne({
+        _id: userId,
+      });
+      const lengthAcceptFriends = infoUserB.acceptFriends.length;
+      // Trả về cho thằng B chứ không trả về cho thằng A
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userId,
+        lengthAcceptFriends: lengthAcceptFriends,
+      });
+
+      
+      // Lấy id của A và trả về cho B
+      socket.broadcast.emit("SERVER_RETURN_USER_ID_CANCEL_FRIEND", {
+        userIdA: myUserID,
+        userIdB: userId,
+      });
     });
 
     // Chức năng từ chối kết bạn - đảo ngược lại lúc này là B xóa

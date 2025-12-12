@@ -95,6 +95,7 @@ if (dataUserAccept) {
     if (userId === data.userId) {
       const div = document.createElement("div");
       div.classList.add("col-6");
+      div.setAttribute("user-id", data.infoUserA._id);
 
       div.innerHTML = `
                 <div class="box-user">
@@ -124,7 +125,27 @@ if (dataUserAccept) {
 
         socket.emit("CLIENT_REFUSE_FRIEND", userId);
       });
+
+      // Tương tự như thế làm cho nút chấp nhận
     }
   });
 }
 // End SERVER_RETURN_INFO_ACCEPT_FRIEND
+
+// Chức năng hủy kết bạn realtime
+// Gắn id của user đó vào box để khi nhấn xóa hủy kết bạn thì trong danh sách xóa luôn thằng đấy
+// Khi A ấn hủy kết bạn thì bên B tìm thẻ div của A và xóa nó đi
+// SERVER_RETURN_USER_ID_CANCEL_FRIEND
+socket.on("SERVER_RETURN_USER_ID_CANCEL_FRIEND", (data) => {
+  const userIdA = data.userIdA;
+  const boxUserRemove = document.querySelector(`[user-id='${userIdA}']`);
+  if (boxUserRemove) {
+    const dataUserAccept = document.querySelector("[data-user-accept]");
+    const userIdB = badgeUsersAccept.getAttribute("badge-users-accept");
+    if (userIdB === data.userIdB) {
+      dataUserAccept.removeChild(boxUserRemove);
+    }
+  }
+});
+
+//End SERVER_RETURN_USER_ID_CANCEL_FRIEND

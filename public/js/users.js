@@ -88,32 +88,33 @@ if (badgeUsersAccept) {
 // END SERVER_RETURN_LENGTH_ACCEPT_LENGTH
 
 // SERVER_RETURN_INFO_ACCEPT_FRIEND
-const dataUserAccept = document.querySelector("[data-user-accept]");
-if (dataUserAccept) {
-  const userId = dataUserAccept.getAttribute("data-user-accept");
-  socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+  // Trang lời mời đã nhận
+  const dataUserAccept = document.querySelector("[data-user-accept]");
+  if (dataUserAccept) {
+    const userId = dataUserAccept.getAttribute("data-user-accept");
     if (userId === data.userId) {
       const div = document.createElement("div");
       div.classList.add("col-6");
       div.setAttribute("user-id", data.infoUserA._id);
 
       div.innerHTML = `
-                <div class="box-user">
-                    <div class="inner-avatar">
-                    </div>
-                    <div class="inner-info">
-                        <div class="inner-name">${data.infoUserA.fullName}</div>
-                        <div class="inner-button">
-                            <button class="btn btn-sm btn-primary mr-1" btn-accept-friend=${data.infoUserA._id}>
-                                Chấp nhận
-                            </button>
-                            <button class="btn btn-sm btn-secondary mr-1"  btn-refuse-friend=${data.infoUserA._id}>
-                                Xóa
-                            </button>    
-                        </div>
-                    </div>
-                </div>
-      `;
+              <div class="box-user">
+                  <div class="inner-avatar">
+                  </div>
+                  <div class="inner-info">
+                      <div class="inner-name">${data.infoUserA.fullName}</div>
+                      <div class="inner-button">
+                          <button class="btn btn-sm btn-primary mr-1" btn-accept-friend=${data.infoUserA._id}>
+                              Chấp nhận
+                          </button>
+                          <button class="btn btn-sm btn-secondary mr-1"  btn-refuse-friend=${data.infoUserA._id}>
+                              Xóa
+                          </button>    
+                      </div>
+                  </div>
+              </div>
+    `;
       dataUserAccept.appendChild(div);
 
       //   Bắt sự kiện cho các button (vì đây là nhờ js vẽ ra giao diện chứ không load lại trang nên phải bắt sự kiện lần nữa)
@@ -128,8 +129,23 @@ if (dataUserAccept) {
 
       // Tương tự như thế làm cho nút chấp nhận
     }
-  });
-}
+  }
+
+  // Trang danh sách người dùng
+  const dataUserNotFriend = document.querySelector("[data-user-not-friend]");
+  if (dataUserNotFriend) {
+    const userId = dataUserNotFriend.getAttribute("data-user-not-friend");
+    if (userId === data.userId) {
+      const boxUserRemove = dataUserNotFriend.querySelector(
+        `[user-id='${data.infoUserA._id}']`
+      );
+      if (boxUserRemove) {
+        dataUserNotFriend.removeChild(boxUserRemove);
+      }
+    }
+  }
+});
+
 // End SERVER_RETURN_INFO_ACCEPT_FRIEND
 
 // Chức năng hủy kết bạn realtime
@@ -137,8 +153,8 @@ if (dataUserAccept) {
 // Khi A ấn hủy kết bạn thì bên B tìm thẻ div của A và xóa nó đi
 // SERVER_RETURN_USER_ID_CANCEL_FRIEND
 socket.on("SERVER_RETURN_USER_ID_CANCEL_FRIEND", (data) => {
-  const userIdA = data.userIdA;
-  const boxUserRemove = document.querySelector(`[user-id='${userIdA}']`);
+  // const userIdA = data.userIdA;
+  const boxUserRemove = document.querySelector(`[user-id='${data.userIdA}']`);
   if (boxUserRemove) {
     const dataUserAccept = document.querySelector("[data-user-accept]");
     const userIdB = badgeUsersAccept.getAttribute("badge-users-accept");

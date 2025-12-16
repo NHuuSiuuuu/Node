@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
 
     // Những người đã gửi yêu cầu kết bạn cho mình (Những người đã gửi kết bạn cho ông A )
     acceptFriends: Array,
-    
+
     // Danh sách bạn bè
     friendList: [
       {
@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema(
         // room_chat_id: String,
       },
     ],
+    statusOnline: String,
 
     deleted: {
       type: Boolean,

@@ -64,7 +64,7 @@ module.exports.request = async (req, res) => {
   console.log(requestFriends);
 
   const users = await User.find({
-    _id: { $in: requestFriends },  // Lấy ra những người có id mà mình yêu cầu kết bạn
+    _id: { $in: requestFriends }, // Lấy ra những người có id mà mình yêu cầu kết bạn
     status: "active",
     deleted: false,
   }).select("id avatar fullName");
@@ -74,7 +74,6 @@ module.exports.request = async (req, res) => {
     users: users,
   });
 };
-
 
 // Chức năng từ chối kb
 module.exports.accept = async (req, res) => {
@@ -91,13 +90,43 @@ module.exports.accept = async (req, res) => {
   const acceptFriends = myUser.acceptFriends;
 
   const users = await User.find({
-    _id: { $in: acceptFriends }, 
+    _id: { $in: acceptFriends },
     status: "active",
     deleted: false,
   }).select("id avatar fullName");
 
   res.render("client/pages/users/accept", {
     pageTitle: "Lời mời đã nhận",
+    users: users,
+  });
+};
+
+module.exports.friends = async (req, res) => {
+  // Socket
+  usersSocket(res);
+  // End socket
+
+  const userId = res.locals.user.id;
+
+  const myUser = await User.findOne({
+    _id: userId,
+  });
+  const friendList = myUser.friendList;
+  // Vì thằng friendList là mảng obj nên phải lặp qua nó
+  const friendListId = friendList.map((item) => item.user_id);
+
+  const users = await User.find({
+    _id: { $in: friendListId },
+    status: "active",
+    deleted: false,
+  }).select("id avatar fullName statusOnline");
+
+  // console.log(users)
+  // res.send("ok")
+
+
+  res.render("client/pages/users/friends", {
+    pageTitle: "Danh sách bạn bè",
     users: users,
   });
 };

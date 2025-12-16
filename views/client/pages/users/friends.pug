@@ -11,7 +11,7 @@ block main
             .col-12
                 +box-head("Danh sách bạn bè")
         
-        .row(data-user-accept=user.id)
+        .row(data-user-friend=user.id)
             each user in users
                 //- user-id=user.id: id của từng người dùng
                 .col-6(user-id=user.id) 

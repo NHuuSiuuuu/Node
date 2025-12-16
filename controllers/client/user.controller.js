@@ -103,6 +103,14 @@ module.exports.loginPost = async (req, res) => {
     }
   );
 
+  // Đăng nhập thành công thì kết nối với socket
+  _io.once("connection", (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE", {
+      userId: user.id,
+      status: "online",
+    });
+  });
+
   res.redirect("/");
 };
 
@@ -116,6 +124,14 @@ module.exports.logout = async (req, res) => {
       statusOnline: "offline",
     }
   );
+    _io.once("connection", (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE", {
+      userId: res.locals.user.id, // biến toàn cục
+      status: "offline",
+    });
+  });
+
+
   res.clearCookie("tokenUser");
   res.clearCookie("cartId");
   res.redirect("/");

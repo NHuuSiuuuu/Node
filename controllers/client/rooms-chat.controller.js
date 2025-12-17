@@ -5,8 +5,16 @@ const chatSocket = require("../../sockets/client/chat.socket");
 
 // [GET] /rooms-chat/
 module.exports.index = async (req, res) => {
+  const userId = res.locals.user.id;
+  const listRoomChat = await RoomChat.find({
+    "users.user_id": userId, // Kiểm tra từng obj 1 xem có user id nào trùng với id đang đăng nhập
+    typeRoom: "group",
+    deleted: false,
+  });
+  // console.log(listRoomChat)
   res.render("client/pages/rooms-chat/index.pug", {
     pageTitle: "Danh sách phòng",
+    listRoomChat: listRoomChat,
   });
 };
 

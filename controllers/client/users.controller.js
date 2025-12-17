@@ -112,6 +112,12 @@ module.exports.friends = async (req, res) => {
     _id: userId,
   });
   const friendList = myUser.friendList;
+/* 
+  friendList = [
+  { user_id: "abc123", createdAt: ... },
+  { user_id: "def456", createdAt: ... }
+  ]
+*/
   // Vì thằng friendList là mảng obj nên phải lặp qua nó
   const friendListId = friendList.map((item) => item.user_id);
 
@@ -121,9 +127,12 @@ module.exports.friends = async (req, res) => {
     deleted: false,
   }).select("id avatar fullName statusOnline");
 
-  // console.log(users)
-  // res.send("ok")
-
+  for (const user of users) {
+    const infoFriend = friendList.find(    //  thằng này trả về  { user_id: "abc123", room_chat_id: "xyz789" },
+      (friend) => friend.user_id == user.id
+    );
+    user.infoFriend = infoFriend
+  }
 
   res.render("client/pages/users/friends", {
     pageTitle: "Danh sách bạn bè",

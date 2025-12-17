@@ -6,10 +6,12 @@ const roomChatSchema = new mongoose.Schema(
     avatar: String,
     typeRoom: String, // type friend or group
     status: String,
-    users: {
-      user_id: String,
-      role: String, // admin or user or superAdmin
-    },
+    users: [
+      {
+        user_id: String,
+        role: String, // admin or user or superAdmin
+      },
+    ],
     deleted: {
       type: Boolean,
       default: false,

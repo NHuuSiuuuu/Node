@@ -54,3 +54,15 @@ Giả sử:
     Ở phía A (userId):
 
     A phải xóa B khỏi requestFriends
+
+# Làm thêm chức năng thêm thành viên khi tạo phòng chat
+- Chỉ superAdmin (Trưởng phòng, người tạo ra nhóm chat) và admin (phó phòng) được thêm user (thành viên bình thường)
+- Chỉ superAdmin chuyển được user thành admin
+
+- Hiển thị sanh sách user trong phòng chat
+-- Danh sách user
+-- user đang onl
+
+- Làm chức năng xóa phòng chat
+-- Chỉ superAdmin đc phép xóa phòng chat
+-- Ngoài ra tham khảo các ứng dụng Mess, Zalo... tự phát triển thêm tính năng
